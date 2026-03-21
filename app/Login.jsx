@@ -17,9 +17,7 @@ import {
 
 // Import du logo de l'application
 import Logo from "../assets/Logo_M2L.svg";
-
-// Import de l'icône Google
-import Google from "../assets/google-icon.svg";
+import Vector from "../assets/Vector.svg";
 
 // Composant principal Login
 export default function Login() {
@@ -43,6 +41,7 @@ export default function Login() {
 
             {/* Carte principale contenant le formulaire */}
             <View style={styles.card}>
+                <Vector width="60%" height="60%" style={styles.background} />
 
                 {/* Logo de l'application */}
                 <Logo style={styles.logo} />
@@ -82,33 +81,6 @@ export default function Login() {
                     <Text style={styles.loginText}>Se connecter</Text>
                 </TouchableOpacity>
 
-                {/* Séparateur entre connexion classique et Google */}
-                <View style={styles.separator}>
-
-                    {/* Ligne gauche */}
-                    <View style={styles.line} />
-
-                    {/* Texte au milieu */}
-                    <Text style={styles.orText}>ou</Text>
-
-                    {/* Ligne droite */}
-                    <View style={styles.line} />
-
-                </View>
-
-                {/* Bouton pour se connecter avec Google */}
-                <TouchableOpacity style={styles.googleBtn}>
-
-                    {/* Icône Google */}
-                    <Google width={20} height={20} />
-
-                    {/* Texte du bouton */}
-                    <Text style={styles.googleText}>
-                        Se connecter avec Google
-                    </Text>
-
-                </TouchableOpacity>
-
                 {/* Lien pour créer un compte */}
                 <View style={styles.registerContainer}>
 
@@ -142,6 +114,13 @@ const styles = StyleSheet.create({
         backgroundColor: "#fcfbfb",
     },
 
+    // Style de l'image de fond
+    background: {
+        position: "absolute",
+        right: 0,
+        top: 0
+    },
+
     // Carte contenant le formulaire
     card: {
         width: "100%",
@@ -170,7 +149,7 @@ const styles = StyleSheet.create({
     subtitle: {
         textAlign: "center",
         fontSize: 14,
-        marginBottom: 30,
+        marginBottom: 60,
         color: "#444",
     },
 
@@ -179,7 +158,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#f4f4f4",
         padding: 14,
         borderRadius: 12,
-        marginBottom: 20,
+        marginBottom: 40,
         fontSize: 14,
     },
 
@@ -189,57 +168,13 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 12,
         alignItems: "center",
-        marginTop: 10,
+        marginTop: 50,
     },
 
     // Texte du bouton connexion
     loginText: {
         color: "#fff",
         fontWeight: "bold",
-    },
-
-    // Conteneur du séparateur
-    separator: {
-        flexDirection: "row",
-        alignItems: "center",
-        marginVertical: 20,
-    },
-
-    // Ligne du séparateur
-    line: {
-        flex: 1,
-        height: 1,
-        backgroundColor: "#131212",
-    },
-
-    // Texte "ou"
-    orText: {
-        marginHorizontal: 10,
-        color: "#777",
-    },
-
-    // Bouton connexion Google
-    googleBtn: {
-        flexDirection: "row",
-        backgroundColor: "#0d1b2a",
-        padding: 15,
-        borderRadius: 12,
-        justifyContent: "center",
-        alignItems: "center",
-        gap: 10,
-    },
-
-    // Icône Google
-    googleIcon: {
-        width: 18,
-        height: 18,
-        resizeMode: "contain",
-    },
-
-    // Texte du bouton Google
-    googleText: {
-        color: "#fff",
-        fontWeight: "500",
     },
 
     // Conteneur du lien d'inscription

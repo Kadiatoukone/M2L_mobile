@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 // Import du logo de l'application
 import Logo from "../assets/Logo_M2L.svg";
+import Vector from "../assets/Vector.svg";
 
 
 // Composant principal de la page d'accueil avant connexion
@@ -15,10 +16,10 @@ export default function LoginHome() {
   const navigation = useNavigation();
 
   return (
-
+    
     // Conteneur principal de la page
     <View style={styles.container}>
-
+      <Vector width="60%" height="60%" style={styles.background} />
       {/* Logo de l'application */}
       <Logo width={100} height={100} />
 
@@ -63,22 +64,21 @@ export default function LoginHome() {
 
 // Styles du composant
 const styles = StyleSheet.create({
-
+  
   // Conteneur principal de l'écran
   container: {
     flex: 1,
-    backgroundColor: "#fcfbfb",
+    backgroundColor: "white",
     justifyContent: "center", // centre verticalement
     alignItems: "center", // centre horizontalement
     padding: 25,
   },
 
-  // Style du fond (non utilisé actuellement)
+  // Style de l'image de fond
   background: {
-    position: "right top",
+    position: "absolute",
     right: 0,
-    top: 0,
-    ImageBackground: "top"
+    top: 0
   },
 
   // Style du titre principal

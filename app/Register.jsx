@@ -17,9 +17,7 @@ import {
 
 // Import du logo de l'application
 import Logo from "../assets/Logo_M2L.svg";
-
-// Import de l'icône Google
-import Google from "../assets/google-icon.svg";
+import Vector from "../assets/Vector.svg";
 
 
 // Composant principal Register (page d'inscription)
@@ -45,6 +43,7 @@ export default function Register() {
 
       {/* Carte contenant le formulaire d'inscription */}
       <View style={styles.card}>
+        <Vector width="60%" height="60%" style={styles.background} />
 
         {/* Logo de l'application */}
         <Logo style={styles.logo} />
@@ -113,26 +112,6 @@ export default function Register() {
           <Text style={styles.registerText}>S’inscrire</Text>
         </TouchableOpacity>
 
-        {/* Séparateur entre inscription classique et Google */}
-        <View style={styles.separator}>
-          <View style={styles.line} />
-          <Text style={styles.orText}>ou</Text>
-          <View style={styles.line} />
-        </View>
-
-        {/* Bouton inscription avec Google */}
-        <TouchableOpacity style={styles.googleBtn}>
-
-          {/* Icône Google */}
-          <Google width={20} height={20} />
-
-          {/* Texte du bouton */}
-          <Text style={styles.googleText}>
-            S'inscrire avec Google
-          </Text>
-
-        </TouchableOpacity>
-
         {/* Lien vers la page de connexion */}
         <View style={styles.loginContainer}>
 
@@ -160,6 +139,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fcfbfb",
+  },
+
+  background: {
+    position: "absolute",
+    right: 0,
+    top: 0
   },
 
   // Carte contenant le formulaire
@@ -216,43 +201,6 @@ const styles = StyleSheet.create({
   registerText: {
     color: "#fff",
     fontWeight: "bold",
-  },
-
-  // Séparateur
-  separator: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 20,
-  },
-
-  // Ligne du séparateur
-  line: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#131212",
-  },
-
-  // Texte "ou"
-  orText: {
-    marginHorizontal: 10,
-    color: "#777",
-  },
-
-  // Bouton Google
-  googleBtn: {
-    flexDirection: "row",
-    backgroundColor: "#0d1b2a",
-    padding: 15,
-    borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
-  },
-
-  // Texte du bouton Google
-  googleText: {
-    color: "#fff",
-    fontWeight: "500",
   },
 
   // Section du lien connexion

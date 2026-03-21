@@ -6,8 +6,7 @@ import {
     View, 
     Text, 
     StyleSheet, 
-    FlatList, 
-    ScrollView, 
+    FlatList,
     TouchableOpacity, 
     TextInput 
 } from "react-native";
@@ -159,17 +158,14 @@ export default function Reservation() {
                 color="black" 
             />
 
-            {/* Scroll permettant de parcourir la liste */}
-            <ScrollView>
+            
 
-                {/* Liste des salles */}
-                <FlatList
-                    data={salles} // données
-                    keyExtractor={(item) => item.id} // clé unique
-                    renderItem={renderSalle} // fonction d'affichage
-                />
-
-            </ScrollView>
+            {/* Liste des salles */}
+            <FlatList
+                data={salles} // données
+                keyExtractor={(item) => item.id} // clé unique
+                renderItem={renderSalle} // fonction d'affichage
+            />
 
         </View>
 
