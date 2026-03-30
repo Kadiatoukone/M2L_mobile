@@ -35,7 +35,7 @@ export default function Reservation() {
             <View style={styles.backButton}>
 
                 {/* Icône retour */}
-                <Ionicons name="arrow-back" size={24} color="black" />
+                <Ionicons name="arrow-back" size={24} color="black" onPress={() => navigation.navigate("Accueil")}/>
 
                 {/* Icône paramètres qui ouvre la page Profile */}
                 <Ionicons 

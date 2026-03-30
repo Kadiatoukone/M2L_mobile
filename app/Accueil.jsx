@@ -2,7 +2,7 @@
 import Footer from "../components/Footer";
 
 // Import de React et du hook useState pour gérer l'état du composant
-import React, { useState } from "react";
+import { useState } from "react";
 
 // Import des composants nécessaires de React Native
 import {
@@ -30,14 +30,14 @@ export default function Accueil() {
 
     // Tableau contenant les sports disponibles avec leur couleur
     const sports = [
-        { name: "FUTSAL", color: "#1f5c2e" },
+        { name: "FOOTBALL", color: "#1f5c2e" },
         { name: "HANDBALL", color: "#d14b3d" },
         { name: "BASKETBALL", color: "#c66a1c" },
         { name: "VOLLEY", color: "#f3c32f" },
         { name: "BADMINTON", color: "#a01010" },
         { name: "DANCE", color: "#777" },
         { name: "PING-PONG", color: "#2d6c7a" },
-        { name: "FOOTBALL", color: "#0e2b18" },
+        { name: "", color: "#0e2b18" },
         { name: "NATATION", color: "#54541c" }
     ];
 
@@ -133,6 +133,7 @@ export default function Accueil() {
                             >
                                 {item.name}
                             </Text>
+                            
                         </View>
                     ))}
 

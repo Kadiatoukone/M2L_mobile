@@ -22,6 +22,7 @@ import Vector from "../assets/Vector.svg";
 // Composant principal Login
 export default function Login() {
 
+$
     // Permet d'utiliser la navigation entre les pages
     const navigation = useNavigation();
 

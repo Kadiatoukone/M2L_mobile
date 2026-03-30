@@ -110,6 +110,7 @@ export default function Reserver() {
 const styles = StyleSheet.create({
     // Conteneur principal
     container: {
+        flex: 1,
         backgroundColor: "#fffefe",
         padding: 25,
         justifyContent: "center"

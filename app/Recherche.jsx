@@ -27,42 +27,42 @@ const salles = [
     {
         id: "1",
         nom: "Nom de la salle",
-        type: "FUTSAL",
+        type: "FOOTBALL",
         distance: "0.5 KM",
         adresse: "Adresse"
     },
     {
         id: "2",
         nom: "Nom de la salle",
-        type: "FUTSAL",
+        type: "FOOTBALL",
         distance: "0.5 KM",
         adresse: "Adresse"
     },
     {
         id: "3",
         nom: "Nom de la salle",
-        type: "FUTSAL",
+        type: "FOOTBALL",
         distance: "0.5 KM",
         adresse: "Adresse"
     },
     {
         id: "4",
         nom: "Nom de la salle",
-        type: "FUTSAL",
+        type: "FOOTBALL",
         distance: "0.5 KM",
         adresse: "Adresse"
     },
     {
         id: "5",
         nom: "Nom de la salle",
-        type: "FUTSAL",
+        type: "FOOTBALL",
         distance: "0.5 KM",
         adresse: "Adresse"
     },
     {
         id: "6",
         nom: "Nom de la salle",
-        type: "FUTSAL",
+        type: "FOOTBALL",
         distance: "0.5 KM",
         adresse: "Adresse"
     },
@@ -80,7 +80,7 @@ export default function Reservation() {
 
         // Carte cliquable qui redirige vers la page Reserver
         <TouchableOpacity 
-            onPress={() => navigation.navigate("Reserver")} 
+            onPress={() => navigation.navigate("Calendrier")} 
             style={styles.card}
         >
         
