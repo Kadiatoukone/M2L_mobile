@@ -1,0 +1,61 @@
+import { View, Text, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { componentStyles, reservationStyles } from "../../../styles/styles";
+import { COLORS } from "../../../constants/theme";
+
+const STATUT_COLORS = {
+  confirmé:     { bg: "#E8F5E9", text: "#2E7D32" },
+  "en attente": { bg: "#FFF8E1", text: "#F57F17" },
+  annulé:       { bg: "#FFEBEE", text: "#C62828" },
+};
+
+/**
+ * Carte d'une réservation avec statut coloré.
+ *
+ * Props :
+ *  - reservation {object}  Données de la réservation
+ *  - onAnnuler   {func}    Callback bouton annuler
+ */
+export default function ReservationCard({ reservation, onAnnuler }) {
+  const { salle, type, date, creneau, statut } = reservation;
+  const sc = STATUT_COLORS[statut] ?? STATUT_COLORS["en attente"];
+
+  return (
+    <View style={componentStyles.cardBase}>
+      {/* Bandeau couleur statut */}
+      <View style={[componentStyles.cardAccent, { backgroundColor: sc.text }]} />
+
+      <View style={componentStyles.cardBody}>
+        {/* Nom salle + badge type */}
+        <View style={componentStyles.cardTop}>
+          <Text style={componentStyles.cardTitle} numberOfLines={1}>{salle}</Text>
+          <View style={componentStyles.badgeDark}>
+            <Text style={componentStyles.badgeDarkText}>{type}</Text>
+          </View>
+        </View>
+
+        {/* Date + créneau */}
+        <View style={reservationStyles.cardRow}>
+          <Ionicons name="calendar-outline" size={13} color={COLORS.textGrey} />
+          <Text style={reservationStyles.cardRowText}>{date}</Text>
+          <Ionicons name="time-outline" size={13} color={COLORS.textGrey} style={{ marginLeft: 8 }} />
+          <Text style={reservationStyles.cardRowText}>{creneau}</Text>
+        </View>
+
+        {/* Statut + bouton annuler */}
+        <View style={reservationStyles.cardFooter}>
+          <View style={[reservationStyles.statutBadge, { backgroundColor: sc.bg }]}>
+            <Text style={[reservationStyles.statutText, { color: sc.text }]}>
+              {statut.charAt(0).toUpperCase() + statut.slice(1)}
+            </Text>
+          </View>
+          {statut !== "annulé" && (
+            <TouchableOpacity style={componentStyles.btnOutline} onPress={onAnnuler}>
+              <Text style={componentStyles.btnOutlineText}>Annuler</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+    </View>
+  );
+}

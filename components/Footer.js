@@ -1,120 +1,91 @@
-// Import des composants et hooks React Native nécessaires
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-
-// Import des icônes utilisées dans le footer
-import Foundation from '@expo/vector-icons/Foundation';
-import Feather from '@expo/vector-icons/Feather';
-
-// Hooks de navigation pour naviguer entre les écrans et récupérer la route actuelle
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import Foundation from "@expo/vector-icons/Foundation";
+import { COLORS, SHADOW } from "../constants/theme";
 
-// Composant Footer
 export default function Footer() {
+  const navigation = useNavigation();
+  const route = useRoute();
 
-    // Hook pour naviguer vers d'autres écrans
-    const navigation = useNavigation();
+  const tabs = [
+    {
+      name: "Accueil",
+      label: "Accueil",
+      icon: (active) => (
+        <Foundation name="home" size={22} color={active ? COLORS.red : COLORS.grey} />
+      ),
+    },
+    {
+      name: "Recherche",
+      label: "Recherche",
+      icon: (active) => (
+        <Ionicons name="search" size={21} color={active ? COLORS.red : COLORS.grey} />
+      ),
+    },
+    {
+      name: "Reservation",
+      label: "Réservations",
+      icon: (active) => (
+        <Ionicons
+          name="calendar-outline"
+          size={21}
+          color={active ? COLORS.red : COLORS.grey}
+        />
+      ),
+    },
+  ];
 
-    // Hook pour connaître la route actuelle dans laquelle on se trouve afin de 
-    // surligner le bouton qui est actif
-    const route = useRoute();
-    
-    // Couleur pour le bouton actif 
-    const activeColor = "#d81b60"; // couleur rose vif pour le bouton actif
-    const defaultColor = "black";   // couleur noire pour les autres boutons
-
-    return (
-        <View style={styles.footer}>
-
-            {/* bouton Accueil */}
-            <TouchableOpacity
-                style={styles.footerItem}
-                onPress={() => navigation.navigate("Accueil")} // navigation vers Accueil
-            >  
-                <Foundation
-                    name="home"
-                    size={22}
-                    // couleur dynamique selon que le bouton est actif ou non
-                    color={route.name === "Accueil" ? activeColor : defaultColor}
-                />
-                <Text
-                style={[
-                    styles.footerText,
-                    { color: route.name === "Accueil" ? activeColor : defaultColor }
-                ]}
-                >
-                ACCUEIL
-                </Text>
-            </TouchableOpacity>
-
-            {/* Onglet Rechercher */}
-            <TouchableOpacity
-                style={styles.footerItem}
-                onPress={() => navigation.navigate("Recherche")} // navigation vers Recherche
-            >  
-                <Feather
-                    name="search"
-                    size={22}
-                    color={route.name === "Recherche" ? activeColor : defaultColor}
-                />
-                <Text
-                    style={[
-                    styles.footerText,
-                    { color: route.name === "Recherche" ? activeColor : defaultColor }
-                ]}
-                >
-                    RECHERCHER
-                </Text>
-            </TouchableOpacity>
-
-            {/* Onglet Mes Réservations */}
-            <TouchableOpacity
-                style={styles.footerItem}
-                onPress={() => navigation.navigate("Reservation")} // navigation vers Reservation
-            >  
-                <Foundation 
-                    name="clipboard-notes" size={25} 
-                    color={route.name === "Reservation" ? activeColor : defaultColor} 
-                />
-                <Text
-                    style={[
-                        styles.footerText,
-                        { color: route.name === "Reservation" ? activeColor : defaultColor }
-                    ]}
-                >
-                MES RÉSERVATIONS
-                </Text>
-            </TouchableOpacity>
-        </View>
-    );
+  return (
+    <View style={styles.footer}>
+      {tabs.map((tab) => {
+        const active = route.name === tab.name;
+        return (
+          <TouchableOpacity
+            key={tab.name}
+            style={styles.tab}
+            onPress={() => navigation.navigate(tab.name)}
+          >
+            {tab.icon(active)}
+            <Text style={[styles.label, active && styles.labelActive]}>
+              {tab.label}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
 }
 
-
 const styles = StyleSheet.create({
-
-    // Conteneur principal du footer
-    footer: {
-        position: "absolute",   // position fixe en bas de l'écran
-        bottom: 1,
-        left: 0,
-        right: 0,
-        height: 70,
-        backgroundColor: "#f2f2f2",
-        flexDirection: "row",   // disposition en ligne pour les bouton
-        justifyContent: "space-around", // pour espacer les boutons 
-        alignItems: "center",
-        borderTopWidth: 1,      // ligne en haut du footer
-        borderColor: "#ddd"
-    },  
-
-    // Style pour chaque bouton du footer
-    footerItem: {
-        alignItems: "center" 
-    },
-
-    // Texte en bas des boutons
-    footerText: {
-        fontSize: 11,
-        marginTop: 4,       
-        fontWeight: "500"
-    }
+  footer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 68,
+    backgroundColor: COLORS.white,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    borderTopWidth: 1,
+    borderTopColor: COLORS.border,
+    ...SHADOW.sm,
+  },
+  tab: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 8,
+  },
+  label: {
+    fontSize: 10,
+    marginTop: 3,
+    fontWeight: "500",
+    color: COLORS.grey,
+  },
+  labelActive: {
+    color: COLORS.red,
+    fontWeight: "700",
+  },
 });
