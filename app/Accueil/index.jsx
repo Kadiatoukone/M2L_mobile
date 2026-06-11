@@ -103,7 +103,7 @@ export default function Accueil() {
               name={item.name}
               color={item.color}
               onPress={() =>
-                navigation.navigate("ListeSalles", {
+                navigation.navigate("ListeSalles/index", {
                   category: item.name,
                   tab,
                 })

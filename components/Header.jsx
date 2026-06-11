@@ -31,7 +31,7 @@ export default function Header({
 
   const handleBack = onBack ?? (() => navigation.goBack());
   const handleSettings =
-    onSettings ?? (() => navigation.navigate("Parametres"));
+    onSettings ?? (() => navigation.navigate("Parametres/index"));
 
   return (
     <View style={navigationStyles.header}>

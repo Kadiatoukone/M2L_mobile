@@ -10,21 +10,21 @@ export default function Footer() {
 
   const tabs = [
     {
-      name: "Accueil",
+      name: "Accueil/index",
       label: "Accueil",
       icon: (active) => (
         <Foundation name="home" size={22} color={active ? COLORS.red : COLORS.grey} />
       ),
     },
     {
-      name: "Recherche",
+      name: "Recherche/index",
       label: "Recherche",
       icon: (active) => (
         <Ionicons name="search" size={21} color={active ? COLORS.red : COLORS.grey} />
       ),
     },
     {
-      name: "Reservation",
+      name: "Reservation/index",
       label: "Réservations",
       icon: (active) => (
         <Ionicons

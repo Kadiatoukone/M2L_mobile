@@ -27,20 +27,20 @@ export default function ListeSalles() {
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState("");
 
-  const fetchSalles = useCallback(async () => {
-    setLoading(true);
-    setError("");
-    try {
-      // On filtre côté API par catégorie (sports / events)
-      const categorie = tab === "sports" ? "sport" : "evenement";
-      const data = await getSalles(categorie);
-      setSalles(data);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [tab]);
+const fetchSalles = useCallback(async () => {
+  setLoading(true);
+  setError('');
+  try {
+    const categorie = tab === 'sports' ? 'sport' : 'evenement';
+    const libelle   = category !== 'Salle' ? category : null; // ← passer le sport/événement
+    const data = await getSalles(categorie, libelle);
+    setSalles(data);
+  } catch (e) {
+    setError(e.message);
+  } finally {
+    setLoading(false);
+  }
+}, [tab, category]);
 
   useEffect(() => { fetchSalles(); }, [fetchSalles]);
 
@@ -88,7 +88,7 @@ export default function ListeSalles() {
               salle={item}
               category={category}
               onPress={() =>
-                navigation.navigate("DetailSalle", { salle: item, category })
+                navigation.navigate("DetailSalle/index", { salle: item, category })
               }
             />
           )}

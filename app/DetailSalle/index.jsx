@@ -77,7 +77,7 @@ export default function DetailSalle() {
         {/* Bouton réserver */}
         <TouchableOpacity
           style={[componentStyles.btnRow, { marginTop: SPACING.xl }]}
-          onPress={() => navigation.navigate("Calendrier", { salleName: nom, salleType: category })}
+          onPress={() => navigation.navigate("Calendrier/index", { salleName: nom, salleType: category })}
           activeOpacity={0.9}
         >
           <Ionicons name="calendar-outline" size={20} color={COLORS.white} />

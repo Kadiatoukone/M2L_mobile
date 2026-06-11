@@ -30,8 +30,11 @@ export function getMe() {
 
 // ── Salles ─────────────────────────────────────────────────────────────────────
 
-export function getSalles(categorie = null) {
-  const query = categorie ? `?categorie=${encodeURIComponent(categorie)}` : '';
+export function getSalles(categorie = null, libelle = null) {
+  const params = new URLSearchParams();
+  if (categorie) params.append('categorie', categorie);
+  if (libelle)   params.append('libelle', libelle);
+  const query = params.toString() ? `?${params.toString()}` : '';
   return authFetch(`/api/salles${query}`);
 }
 

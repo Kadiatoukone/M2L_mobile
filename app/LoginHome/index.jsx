@@ -30,14 +30,14 @@ export default function LoginHome() {
       <View style={authStyles.homeActions}>
         <TouchableOpacity
           style={componentStyles.btnPrimary}
-          onPress={() => navigation.navigate("Login")}
+          onPress={() => navigation.navigate("Login/index")}
         >
           <Text style={componentStyles.btnPrimaryText}>Se connecter</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={componentStyles.btnSecondary}
-          onPress={() => navigation.navigate("Register")}
+          onPress={() => navigation.navigate("Register/index")}
         >
           <Text style={componentStyles.btnSecondaryText}>Créer un compte</Text>
         </TouchableOpacity>

@@ -8,7 +8,6 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import SettingItem from "./_components/SettingItem";
 import { parametresStyles, commonStyles } from "../../styles/styles";
@@ -21,7 +20,7 @@ export default function Parametres() {
 
   const handleLogout = async () => {
     await logout();
-    navigation.reset({ index: 0, routes: [{ name: "LoginHome" }] });
+    navigation.reset({ index: 0, routes: [{ name: "LoginHome/index" }] });
   };
 
   return (

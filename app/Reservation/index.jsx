@@ -128,7 +128,7 @@ export default function Reservation() {
               <Text style={commonStyles.emptySub}>Réservez une salle depuis l'accueil</Text>
               <TouchableOpacity
                 style={[reservationStyles.emptyBtn, { marginTop: 16 }]}
-                onPress={() => navigation.navigate("Accueil")}
+                onPress={() => navigation.navigate("Accueil/index")}
               >
                 <Text style={reservationStyles.emptyBtnText}>Explorer les salles</Text>
               </TouchableOpacity>

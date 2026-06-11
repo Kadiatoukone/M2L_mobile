@@ -116,7 +116,7 @@ export default function Recherche() {
             salle={item}
             category={item.type}
             showDistance
-            onPress={() => navigation.navigate("DetailSalle", { salle: item, category: item.type })}
+            onPress={() => navigation.navigate("DetailSalle/index", { salle: item, category: item.type })}
           />
         )}
         ListEmptyComponent={

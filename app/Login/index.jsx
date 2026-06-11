@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import {
   ActivityIndicator,
@@ -19,7 +19,7 @@ import { login } from "../../services/authService";
 import { authStyles, componentStyles } from "../../styles/styles";
 
 export default function Login() {
-  const router = useRouter();
+  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -37,7 +37,7 @@ export default function Login() {
     try {
       console.log(email, password);
       await login(email.trim(), password);
-      router.replace("/Accueil");
+      navigation.navigate("Accueil/index");
     } catch (e) {
       setError(e.message);
       console.error(e);
@@ -145,7 +145,7 @@ export default function Login() {
             <Text style={authStyles.formFooterText}>
               Pas encore de compte ?{" "}
             </Text>
-            <TouchableOpacity onPress={() => router.push("/Register")}>
+            <TouchableOpacity onPress={() => navigation.navigate("Register/index")}>
               <Text style={authStyles.formFooterLink}>S'inscrire</Text>
             </TouchableOpacity>
           </View>

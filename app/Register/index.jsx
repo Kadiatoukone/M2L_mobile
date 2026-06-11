@@ -171,7 +171,7 @@ export default function Register() {
           {/* Lien connexion */}
           <View style={authStyles.formFooter}>
             <Text style={authStyles.formFooterText}>Déjà un compte ? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <TouchableOpacity onPress={() => navigation.navigate("Login/index")}>
               <Text style={authStyles.formFooterLink}>Se connecter</Text>
             </TouchableOpacity>
           </View>
@@ -182,7 +182,7 @@ export default function Register() {
         visible={successModal}
         onClose={() => {
           setSuccessModal(false);
-          navigation.navigate("Login");
+          navigation.navigate("Login/index");
         }}
       />
     </KeyboardAvoidingView>
