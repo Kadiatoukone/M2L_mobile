@@ -1,27 +1,25 @@
 import { Stack } from "expo-router";
 
-// Layout racine : stack sans header natif (chaque écran gère le sien)
-// Avec Expo Router, app/Login/index.jsx → nom de route "Login"
 export default function RootLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       {/* ── Authentification ── */}
-      <Stack.Screen name="LoginHome" />
-      <Stack.Screen name="Login" />
-      <Stack.Screen name="Register" />
+      <Stack.Screen name="LoginHome/index" />
+      <Stack.Screen name="Login/index" />
+      <Stack.Screen name="Register/index" />
 
       {/* ── Navigation principale ── */}
-      <Stack.Screen name="Accueil" />
-      <Stack.Screen name="Recherche" />
-      <Stack.Screen name="Reservation" />
+      <Stack.Screen name="Accueil/index" />
+      <Stack.Screen name="Recherche/index" />
+      <Stack.Screen name="Reservation/index" />
 
       {/* ── Flux réservation ── */}
-      <Stack.Screen name="ListeSalles" />
-      <Stack.Screen name="DetailSalle" />
-      <Stack.Screen name="Calendrier" />
+      <Stack.Screen name="ListeSalles/index" />
+      <Stack.Screen name="DetailSalle/index" />
+      <Stack.Screen name="Calendrier/index" />
 
       {/* ── Paramètres ── */}
-      <Stack.Screen name="Parametres" />
+      <Stack.Screen name="Parametres/index" />
     </Stack>
   );
 }
