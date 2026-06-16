@@ -4,11 +4,20 @@ import { useNavigate } from "react-router-dom";
 export default function ParametresPage() {
   const navigate = useNavigate();
 
-  const [settings, setSettings] = useState({
-    notifEmail: true,
-    notifSMS: true,
-    notifReservation: true,
-    modeSombre: false,
+  const [profile, setProfile] = useState({
+    prenom: "Gina",
+    nom: "Banen",
+    pseudo: "gina.banen",
+    email: "gina.banen@email.com",
+    telephone: "+33 6 67 80 04 56",
+    naissance: "1990-01-01",
+    verification: "En attente",
+  });
+
+  const [notifications, setNotifications] = useState({
+    push: true,
+    email: true,
+    sms: true,
   });
 
   const [passwords, setPasswords] = useState({
@@ -17,8 +26,8 @@ export default function ParametresPage() {
     confirmation: "",
   });
 
-  const handleSettingChange = (key, value) => {
-    setSettings((prev) => ({
+  const handleProfileChange = (key, value) => {
+    setProfile((prev) => ({
       ...prev,
       [key]: value,
     }));
@@ -31,8 +40,16 @@ export default function ParametresPage() {
     }));
   };
 
-  const handleSave = () => {
-    console.log("Paramètres :", settings);
+  const handleNotificationsChange = (key, value) => {
+    setNotifications((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const handleProfileSave = () => {
+    console.log("Profil modifié :", profile);
+    console.log("Notifications :", notifications);
     // appel API
   };
 
@@ -46,6 +63,11 @@ export default function ParametresPage() {
     // appel API
   };
 
+  const handleVerification = () => {
+    console.log("Vérification du compte demandée");
+    // appel API
+  };
+
   const handleLogout = () => {
     sessionStorage.clear();
     navigate("/login");
@@ -54,9 +76,7 @@ export default function ParametresPage() {
   return (
     <div className="parametres-container">
       <header className="profil-header">
-        <button onClick={() => navigate(-1)}>
-          ← Retour
-        </button>
+        <button onClick={() => navigate(-1)}>← Retour</button>
 
         <h1>Paramètres</h1>
 
@@ -64,73 +84,76 @@ export default function ParametresPage() {
       </header>
 
       <div className="profil-card">
-        <h2>Notification</h2>
+        <h2> Profil</h2>
 
-        <div className="toggle-row">
-          <span>Notifications email</span>
+        <label>
+          Modifier la photo de profil
+          <button type="button" className="btn-upload">
+            Choisir une photo
+          </button>
+        </label>
+
+        <label>
+          Nom
           <input
-            type="checkbox"
-            checked={settings.notifEmail}
-            onChange={(e) =>
-              handleSettingChange(
-                "notifEmail",
-                e.target.checked
-              )
-            }
+            type="text"
+            value={profile.nom}
+            onChange={(e) => handleProfileChange("nom", e.target.value)}
           />
-        </div>
+        </label>
 
-        <div className="toggle-row">
-          <span>Notification SMS </span>
+        <label>
+          Prénom
           <input
-            type="checkbox"
-            checked={settings.notifSMS}
-            onChange={(e) =>
-              handleSettingChange(
-                "notifSMS",
-                e.target.checked
-              )
-            }
+            type="text"
+            value={profile.prenom}
+            onChange={(e) => handleProfileChange("prenom", e.target.value)}
           />
-        </div>
+        </label>
 
-        <div className="toggle-row">
-          <span>Notifications réservation</span>
+        <label>
+          Pseudo
           <input
-            type="checkbox"
-            checked={settings.notifReservation}
-            onChange={(e) =>
-              handleSettingChange(
-                "notifReservation",
-                e.target.checked
-              )
-            }
+            type="text"
+            value={profile.pseudo}
+            onChange={(e) => handleProfileChange("pseudo", e.target.value)}
           />
-        </div>
+        </label>
 
+        <label>
+          Adresse e-mail
+          <input
+            type="email"
+            value={profile.email}
+            onChange={(e) => handleProfileChange("email", e.target.value)}
+          />
+        </label>
 
-        <button
-          className="save-btn"
-          onClick={handleSave}
-        >
-          Enregistrer les préférences
+        <label>
+          Numéro de téléphone
+          <input
+            type="tel"
+            value={profile.telephone}
+            onChange={(e) => handleProfileChange("telephone", e.target.value)}
+          />
+        </label>
+
+        
+
+        <button className="save-btn" onClick={handleProfileSave}>
+          Enregistrer le profil
         </button>
       </div>
 
       <div className="profil-card">
-        <h2>Sécurité</h2>
+        <h2> Changer le mot de passe</h2>
 
         <label>
           Ancien mot de passe
           <input
             type="password"
             value={passwords.ancien}
-            onChange={(e) =>
-              handlePasswordChange(
-                "ancien",
-                e.target.value
-              )
-            }
+            onChange={(e) => handlePasswordChange("ancien", e.target.value)}
           />
         </label>
 
@@ -139,12 +162,7 @@ export default function ParametresPage() {
           <input
             type="password"
             value={passwords.nouveau}
-            onChange={(e) =>
-              handlePasswordChange(
-                "nouveau",
-                e.target.value
-              )
-            }
+            onChange={(e) => handlePasswordChange("nouveau", e.target.value)}
           />
         </label>
 
@@ -153,30 +171,49 @@ export default function ParametresPage() {
           <input
             type="password"
             value={passwords.confirmation}
-            onChange={(e) =>
-              handlePasswordChange(
-                "confirmation",
-                e.target.value
-              )
-            }
+            onChange={(e) => handlePasswordChange("confirmation", e.target.value)}
           />
         </label>
 
-        <button
-          className="save-btn"
-          onClick={handlePasswordSave}
-        >
+        <button className="save-btn" onClick={handlePasswordSave}>
           Modifier le mot de passe
         </button>
       </div>
 
       <div className="profil-card">
-        <h2>Compte</h2>
+        <h2> Notifications</h2>
 
-        <button
-          className="danger"
-          onClick={handleLogout}
-        >
+        <div className="toggle-row">
+          <span>Notifications push</span>
+          <input
+            type="checkbox"
+            checked={notifications.push}
+            onChange={(e) => handleNotificationsChange("push", e.target.checked)}
+          />
+        </div>
+
+        <div className="toggle-row">
+          <span>Notifications par e-mail</span>
+          <input
+            type="checkbox"
+            checked={notifications.email}
+            onChange={(e) => handleNotificationsChange("email", e.target.checked)}
+          />
+        </div>
+
+        <div className="toggle-row">
+          <span>Notifications SMS</span>
+          <input
+            type="checkbox"
+            checked={notifications.sms}
+            onChange={(e) => handleNotificationsChange("sms", e.target.checked)}
+          />
+        </div>
+      </div>
+
+      <div className="profil-card">
+        <h2>Compte</h2>
+        <button className="danger" onClick={handleLogout}>
           Déconnexion
         </button>
       </div>
