@@ -60,13 +60,13 @@ export default function Reservation() {
   };
 
   const toCardFormat = (r) => ({
-    id:      r.id,
-    salle:   r.motif || "Réservation",
-    type:    "",
-    date:    r.dateDebut,
-    creneau: `${r.heureDebut} \u2013 ${r.heureFin}`,
-    statut:  MAP_STATUT[r.statut] ?? "en attente",
-  });
+  id:      r.id,
+  salle:   r.salle?.nom ?? r.motif ?? "Réservation",
+  type:    r.salle?.ville ?? "",                       
+  date:    r.dateDebut,
+  creneau: `${r.heureDebut} – ${r.heureFin}`,
+  statut:  MAP_STATUT[r.statut] ?? "en attente",
+});
 
   const sorted = reservations
     .map(toCardFormat)

@@ -22,7 +22,7 @@ import { creerReservation } from "../../services/apiService";
 export default function Calendrier() {
   const navigation = useNavigation();
   const route = useRoute();
-  const { salleName = "Salle", salleType = "Sport" } = route.params ?? {};
+  const { salleId, salleName = "Salle", salleType = "Sport" } = route.params ?? {};
 
   const today = new Date();
   const [annee, setAnnee]               = useState(today.getFullYear());
@@ -61,16 +61,21 @@ export default function Calendrier() {
       // Formatage du créneau : "09:00 – 10:30" → heureDebut / heureFin
       const [heureDebut, heureFin] = creneauSel.split(" \u2013 ");
 
-      await creerReservation({
-        dateDebut:  dateISO,
-        dateFin:    dateISO,
-        heureDebut: heureDebut.trim(),
-        heureFin:   heureFin.trim(),
-        motif:      description.trim() || salleName,
-      });
+      const payload = {
+      salleId:    salleId,
+      dateDebut:  dateISO,
+      dateFin:    dateISO,
+      heureDebut: heureDebut.trim(),
+      heureFin:   heureFin.trim(),
+      motif:      description.trim() || salleName,
+    };
+
+    console.log("PAYLOAD ENVOYÉ :", JSON.stringify(payload)); 
+
+    await creerReservation(payload);
 
       setShowModal(false);
-      navigation.navigate("Reservation");
+      navigation.navigate("Reservation/index");
     } catch (e) {
       setShowModal(false);
       Alert.alert("Erreur", e.message);
