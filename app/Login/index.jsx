@@ -2,24 +2,27 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StatusBar,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StatusBar,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import Logo from "../../assets/Logo_M2L.svg";
 import Vector from "../../assets/Vector.svg";
-import { COLORS } from "../../constants/theme";
+import { useTheme, useStyles } from "../../context/ThemeContext";
+import { useUser } from "../../context/UserContext";
 import { login } from "../../services/authService";
-import { authStyles, componentStyles } from "../../styles/styles";
 
 export default function Login() {
   const navigation = useNavigation();
+  const { colors } = useTheme();
+  const { authStyles, componentStyles } = useStyles();
+  const { refreshUser } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -35,9 +38,9 @@ export default function Login() {
 
     setLoading(true);
     try {
-      console.log(email, password);
       await login(email.trim(), password);
-      navigation.navigate("Accueil/index");
+      await refreshUser();
+      navigation.replace("Accueil/index");
     } catch (e) {
       setError(e.message);
       console.error(e);
@@ -51,7 +54,7 @@ export default function Login() {
       style={authStyles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <Vector width="70%" height="70%" style={authStyles.background} />
 
       <ScrollView
@@ -77,7 +80,7 @@ export default function Login() {
               <Ionicons
                 name="alert-circle-outline"
                 size={16}
-                color={COLORS.red}
+                color={colors.red}
               />
               <Text style={componentStyles.errorText}>{error}</Text>
             </View>
@@ -88,13 +91,13 @@ export default function Login() {
             <Ionicons
               name="mail-outline"
               size={18}
-              color={COLORS.grey}
+              color={colors.grey}
               style={componentStyles.inputIcon}
             />
             <TextInput
               style={componentStyles.input}
               placeholder="Adresse e-mail"
-              placeholderTextColor={COLORS.grey}
+              placeholderTextColor={colors.grey}
               value={email}
               onChangeText={setEmail}
               autoCapitalize="none"
@@ -107,13 +110,13 @@ export default function Login() {
             <Ionicons
               name="lock-closed-outline"
               size={18}
-              color={COLORS.grey}
+              color={colors.grey}
               style={componentStyles.inputIcon}
             />
             <TextInput
               style={componentStyles.input}
               placeholder="Mot de passe"
-              placeholderTextColor={COLORS.grey}
+              placeholderTextColor={colors.grey}
               secureTextEntry={!showPassword}
               value={password}
               onChangeText={setPassword}
@@ -122,7 +125,7 @@ export default function Login() {
               <Ionicons
                 name={showPassword ? "eye-off-outline" : "eye-outline"}
                 size={18}
-                color={COLORS.grey}
+                color={colors.grey}
               />
             </TouchableOpacity>
           </View>
@@ -134,7 +137,7 @@ export default function Login() {
             disabled={loading}
           >
             {loading ? (
-              <ActivityIndicator color={COLORS.white} />
+              <ActivityIndicator color={colors.white} />
             ) : (
               <Text style={componentStyles.btnPrimaryText}>Se connecter</Text>
             )}

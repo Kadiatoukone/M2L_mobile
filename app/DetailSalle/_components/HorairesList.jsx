@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import { detailSalleStyles } from "../../../styles/styles";
+import { useStyles } from "../../../context/ThemeContext";
 
 /**
  * Liste des horaires d'ouverture réels de la salle (issus de la BDD,
@@ -9,6 +9,7 @@ import { detailSalleStyles } from "../../../styles/styles";
  *  - horaires {Array<{ id, jour, heureOuverture, heureFermeture, statut }>}
  */
 export default function HorairesList({ horaires = [] }) {
+  const { detailSalleStyles } = useStyles();
   if (horaires.length === 0) {
     return (
       <Text style={detailSalleStyles.emptyHint}>

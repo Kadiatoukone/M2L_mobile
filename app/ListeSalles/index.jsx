@@ -12,13 +12,14 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import SearchBar from "../../components/SearchBar";
 import SalleCard from "../../components/SalleCard";
-import { listeSallesStyles, commonStyles } from "../../styles/styles";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS } from "../../constants/theme";
+import { useTheme, useStyles } from "../../context/ThemeContext";
 import { getSalles } from "../../services/apiService";
 
 export default function ListeSalles() {
   const navigation = useNavigation();
+  const { colors, isDark } = useTheme();
+  const { listeSallesStyles, commonStyles } = useStyles();
   const route = useRoute();
   const { category = "Salle", tab = "sports" } = route.params ?? {};
 
@@ -52,7 +53,7 @@ const fetchSalles = useCallback(async () => {
 
   return (
     <SafeAreaView style={commonStyles.safeGrey}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} backgroundColor={colors.surface} />
 
       <Header title={category} showBack showSettings />
 
@@ -71,11 +72,11 @@ const fetchSalles = useCallback(async () => {
 
       {loading ? (
         <View style={commonStyles.emptyState}>
-          <ActivityIndicator size="large" color={COLORS.red} />
+          <ActivityIndicator size="large" color={colors.red} />
         </View>
       ) : error ? (
         <View style={commonStyles.emptyState}>
-          <Ionicons name="wifi-outline" size={48} color={COLORS.border} />
+          <Ionicons name="wifi-outline" size={48} color={colors.border} />
           <Text style={commonStyles.emptyTitle}>Impossible de charger</Text>
           <Text style={commonStyles.emptySub}>{error}</Text>
         </View>
@@ -96,7 +97,7 @@ const fetchSalles = useCallback(async () => {
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View style={commonStyles.emptyState}>
-              <Ionicons name="search-outline" size={48} color={COLORS.border} />
+              <Ionicons name="search-outline" size={48} color={colors.border} />
               <Text style={commonStyles.emptyTitle}>Aucune salle trouvée</Text>
               <Text style={commonStyles.emptySub}>Essayez un autre mot-clé</Text>
             </View>

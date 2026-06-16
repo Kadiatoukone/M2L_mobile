@@ -1,7 +1,6 @@
 import { View, TextInput, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { componentStyles } from "../styles/styles";
-import { COLORS } from "../constants/theme";
+import { useTheme, useStyles } from "../context/ThemeContext";
 
 /**
  * Barre de recherche réutilisable.
@@ -20,19 +19,21 @@ export default function SearchBar({
   icon = "location-outline",
   style,
 }) {
+  const { colors } = useTheme();
+  const { componentStyles } = useStyles();
   return (
     <View style={[componentStyles.searchBar, style]}>
-      <Ionicons name={icon} size={18} color={COLORS.red} />
+      <Ionicons name={icon} size={18} color={colors.red} />
       <TextInput
         style={componentStyles.searchInput}
         placeholder={placeholder}
-        placeholderTextColor={COLORS.grey}
+        placeholderTextColor={colors.grey}
         value={value}
         onChangeText={onChangeText}
       />
       {value?.length > 0 && (
         <TouchableOpacity onPress={() => onChangeText("")}>
-          <Ionicons name="close-circle" size={18} color={COLORS.grey} />
+          <Ionicons name="close-circle" size={18} color={colors.grey} />
         </TouchableOpacity>
       )}
     </View>

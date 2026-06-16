@@ -12,13 +12,10 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
-import { CATEGORY_COLORS, COLORS, SPACING } from "../../constants/theme";
+import { CATEGORY_COLORS, SPACING } from "../../constants/theme";
+import { useTheme, useStyles } from "../../context/ThemeContext";
+import { useUser } from "../../context/UserContext";
 import { getTypesSalles } from "../../services/apiService";
-import {
-  accueilStyles,
-  commonStyles,
-  componentStyles,
-} from "../../styles/styles";
 import CategoryCard from "./_components/CategoryCard";
 
 // Attribue une couleur différente à chaque type, piochée aléatoirement
@@ -39,6 +36,9 @@ function assignColors(items) {
 
 export default function Accueil() {
   const navigation = useNavigation();
+  const { colors, isDark } = useTheme();
+  const { accueilStyles, commonStyles, componentStyles, reservationStyles } = useStyles();
+  const { user } = useUser();
   const [tab, setTab] = useState("sports");
 
   const [sports, setSports] = useState([]);
@@ -67,25 +67,25 @@ export default function Accueil() {
   const categories = tab === "sports" ? sports : evenements;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.surface }}>
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} backgroundColor={colors.surface} />
 
-      {/* Header avec localisation */}
+      {/* Header avec l'identité de l'adhérent connecté */}
       <Header
         showSettings
         left={
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 4,
-              flex: 1,
-            }}
-          >
-            <Ionicons name="location-outline" size={16} color={COLORS.red} />
-            <Text style={{ fontSize: 13, color: COLORS.textGrey }}>
-              Maison des Ligues, Nancy
-            </Text>
+          <View style={reservationStyles.userInfo}>
+            <View style={reservationStyles.avatar}>
+              <Ionicons name="person" size={20} color={colors.white} />
+            </View>
+            <View>
+              <Text style={reservationStyles.username} numberOfLines={1}>
+                {user ? `${user.prenom} ${user.nom}` : "—"}
+              </Text>
+              <Text style={reservationStyles.ligue} numberOfLines={1}>
+                {[user?.ligue, user?.poste].filter(Boolean).join(" · ") || "Adhérent M2L"}
+              </Text>
+            </View>
           </View>
         }
       />
@@ -107,7 +107,7 @@ export default function Accueil() {
           style={{
             width: 40,
             height: 3,
-            backgroundColor: COLORS.red,
+            backgroundColor: colors.red,
             borderRadius: 2,
             marginTop: SPACING.md,
             marginBottom: SPACING.lg,
@@ -151,17 +151,17 @@ export default function Accueil() {
         {/* Grille */}
         {loading ? (
           <View style={commonStyles.emptyState}>
-            <ActivityIndicator size="large" color={COLORS.red} />
+            <ActivityIndicator size="large" color={colors.red} />
           </View>
         ) : error ? (
           <View style={commonStyles.emptyState}>
-            <Ionicons name="wifi-outline" size={48} color={COLORS.border} />
+            <Ionicons name="wifi-outline" size={48} color={colors.border} />
             <Text style={commonStyles.emptyTitle}>Impossible de charger</Text>
             <Text style={commonStyles.emptySub}>{error}</Text>
           </View>
         ) : categories.length === 0 ? (
           <View style={commonStyles.emptyState}>
-            <Ionicons name="albums-outline" size={48} color={COLORS.border} />
+            <Ionicons name="albums-outline" size={48} color={colors.border} />
             <Text style={commonStyles.emptyTitle}>Aucun type disponible</Text>
           </View>
         ) : (

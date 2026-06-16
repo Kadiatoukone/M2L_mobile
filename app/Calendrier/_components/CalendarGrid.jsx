@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { calendrierStyles } from "../../../styles/styles";
-import { COLORS } from "../../../constants/theme";
+import { useTheme, useStyles } from "../../../context/ThemeContext";
 import { estOuvert } from "./horairesUtils";
 
 const JOURS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
@@ -25,6 +24,8 @@ function memeJour(a, b) { return !!a && !!b && a.toDateString() === b.toDateStri
  *  - onSelect            {func}       Appelé avec la Date tapée (jours ouverts et >= minDate uniquement)
  */
 export default function CalendarGrid({ annee, mois, dateDebut, dateFin, horaires = [], minDate = null, onPrev, onNext, onSelect }) {
+  const { colors } = useTheme();
+  const { calendrierStyles } = useStyles();
   const today  = new Date();
   const total  = nbJours(annee, mois);
   const offset = premierJour(annee, mois);
@@ -36,11 +37,11 @@ export default function CalendarGrid({ annee, mois, dateDebut, dateFin, horaires
       {/* Navigation mois */}
       <View style={calendrierStyles.monthNav}>
         <TouchableOpacity onPress={onPrev} style={calendrierStyles.navBtn}>
-          <Ionicons name="chevron-back" size={20} color={COLORS.text} />
+          <Ionicons name="chevron-back" size={20} color={colors.text} />
         </TouchableOpacity>
         <Text style={calendrierStyles.monthTitle}>{MOIS[mois]} {annee}</Text>
         <TouchableOpacity onPress={onNext} style={calendrierStyles.navBtn}>
-          <Ionicons name="chevron-forward" size={20} color={COLORS.text} />
+          <Ionicons name="chevron-forward" size={20} color={colors.text} />
         </TouchableOpacity>
       </View>
 

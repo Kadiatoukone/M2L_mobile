@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { componentStyles } from "../styles/styles";
-import { COLORS } from "../constants/theme";
+import { useTheme, useStyles } from "../context/ThemeContext";
 
 /**
  * Carte d'une salle — utilisée dans ListeSalles et Recherche.
@@ -13,6 +12,8 @@ import { COLORS } from "../constants/theme";
  *  - showDistance {boolean} Afficher le badge distance (Recherche uniquement)
  */
 export default function SalleCard({ salle, category, onPress, showDistance = false }) {
+  const { colors } = useTheme();
+  const { componentStyles } = useStyles();
   const { nom, adresse, note = 0, capacite, distance } = salle;
   const stars = Math.round(note);
 
@@ -43,7 +44,7 @@ export default function SalleCard({ salle, category, onPress, showDistance = fal
               key={i}
               name={i < stars ? "star" : "star-outline"}
               size={12}
-              color={i < stars ? "#FFC107" : COLORS.border}
+              color={i < stars ? "#FFC107" : colors.border}
             />
           ))}
           <Text style={componentStyles.ratingNote}>{note.toFixed(1)}</Text>
@@ -51,13 +52,13 @@ export default function SalleCard({ salle, category, onPress, showDistance = fal
 
         {/* Adresse + distance optionnelle */}
         <View style={componentStyles.adresseRow}>
-          <Ionicons name="location-outline" size={13} color={COLORS.red} />
+          <Ionicons name="location-outline" size={13} color={colors.red} />
           <Text style={componentStyles.adresseText} numberOfLines={1}>
             {adresse}
           </Text>
           {showDistance && distance && (
-            <View style={{ backgroundColor: COLORS.lightGrey, paddingHorizontal: 7, paddingVertical: 2, borderRadius: 100 }}>
-              <Text style={{ fontSize: 11, color: COLORS.textGrey, fontWeight: "600" }}>
+            <View style={{ backgroundColor: colors.lightGrey, paddingHorizontal: 7, paddingVertical: 2, borderRadius: 100 }}>
+              <Text style={{ fontSize: 11, color: colors.textGrey, fontWeight: "600" }}>
                 {distance}
               </Text>
             </View>
@@ -67,15 +68,15 @@ export default function SalleCard({ salle, category, onPress, showDistance = fal
         {/* Capacité (si dispo) */}
         {capacite && (
           <View style={{ flexDirection: "row", alignItems: "center", marginTop: 3 }}>
-            <Ionicons name="people-outline" size={13} color={COLORS.textGrey} />
-            <Text style={{ fontSize: 12, color: COLORS.textGrey, marginLeft: 4 }}>
+            <Ionicons name="people-outline" size={13} color={colors.textGrey} />
+            <Text style={{ fontSize: 12, color: colors.textGrey, marginLeft: 4 }}>
               Capacité : {capacite} pers.
             </Text>
           </View>
         )}
       </View>
 
-      <Ionicons name="chevron-forward" size={18} color={COLORS.grey} />
+      <Ionicons name="chevron-forward" size={18} color={colors.grey} />
     </TouchableOpacity>
   );
 }

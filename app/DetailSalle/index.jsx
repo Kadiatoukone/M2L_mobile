@@ -11,12 +11,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Footer from "../../components/Footer";
 import { API_URL } from "../../constants/api";
-import { COLORS, SPACING } from "../../constants/theme";
-import {
-  commonStyles,
-  componentStyles,
-  detailSalleStyles,
-} from "../../styles/styles";
+import { SPACING } from "../../constants/theme";
+import { useTheme, useStyles } from "../../context/ThemeContext";
 import DisponibilitesPreview from "./_components/DisponibilitesPreview";
 import HorairesList from "./_components/HorairesList";
 import InfoRow from "./_components/InfoRow";
@@ -24,6 +20,8 @@ import SalleAvis from "./_components/SalleAvis";
 
 export default function DetailSalle() {
   const navigation = useNavigation();
+  const { colors } = useTheme();
+  const { commonStyles, componentStyles, detailSalleStyles } = useStyles();
   const route = useRoute();
   const { salle = {}, category = "Sport" } = route.params ?? {};
 
@@ -49,7 +47,7 @@ export default function DetailSalle() {
 
   return (
     <SafeAreaView style={commonStyles.safeGrey}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.darkRed} />
+      <StatusBar barStyle="light-content" backgroundColor={colors.darkRed} />
 
       {/* Bandeau coloré */}
       <View style={componentStyles.banner}>
@@ -57,7 +55,7 @@ export default function DetailSalle() {
           style={detailSalleStyles.bannerBack}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="arrow-back" size={22} color={COLORS.white} />
+          <Ionicons name="arrow-back" size={22} color={colors.white} />
         </TouchableOpacity>
         <View style={detailSalleStyles.categoryBadge}>
           <Text style={detailSalleStyles.categoryBadgeText}>
@@ -86,7 +84,7 @@ export default function DetailSalle() {
           />
         ) : (
           <View style={detailSalleStyles.photoPlaceholder}>
-            <Ionicons name="image-outline" size={32} color={COLORS.grey} />
+            <Ionicons name="image-outline" size={32} color={colors.grey} />
             <Text style={detailSalleStyles.photoPlaceholderText}>
               Aucune photo disponible
             </Text>
@@ -152,7 +150,7 @@ export default function DetailSalle() {
           }
           activeOpacity={0.9}
         >
-          <Ionicons name="calendar-outline" size={20} color={COLORS.white} />
+          <Ionicons name="calendar-outline" size={20} color={colors.white} />
           <Text style={componentStyles.btnRowText}>Réserver cette salle</Text>
         </TouchableOpacity>
       </ScrollView>

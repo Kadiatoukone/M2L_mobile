@@ -12,13 +12,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Footer from "../../components/Footer";
-import { COLORS, SPACING } from "../../constants/theme";
+import { SPACING } from "../../constants/theme";
+import { useTheme, useStyles } from "../../context/ThemeContext";
 import { creerReservation, getDisponibilite } from "../../services/apiService";
-import {
-  calendrierStyles,
-  commonStyles,
-  componentStyles,
-} from "../../styles/styles";
 import CalendarGrid from "./_components/CalendarGrid";
 import ConfirmationModal from "./_components/ConfirmationModal";
 import {
@@ -46,6 +42,8 @@ function calculerMinDate() {
 
 export default function Calendrier() {
   const navigation = useNavigation();
+  const { colors } = useTheme();
+  const { calendrierStyles, commonStyles, componentStyles } = useStyles();
   const route = useRoute();
   const {
     salleId = null,
@@ -280,14 +278,14 @@ export default function Calendrier() {
 
   return (
     <SafeAreaView style={commonStyles.safeGrey}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.darkRed} />
+      <StatusBar barStyle="light-content" backgroundColor={colors.darkRed} />
 
       <View style={calendrierStyles.bannerRow}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{ padding: 4, marginRight: SPACING.sm }}
         >
-          <Ionicons name="arrow-back" size={22} color={COLORS.white} />
+          <Ionicons name="arrow-back" size={22} color={colors.white} />
         </TouchableOpacity>
         <View style={{ flex: 1 }}>
           <Text style={calendrierStyles.bannerType}>
@@ -332,7 +330,7 @@ export default function Calendrier() {
             <Ionicons
               name="information-circle-outline"
               size={16}
-              color={COLORS.red}
+              color={colors.red}
             />
             <Text style={calendrierStyles.mensuelText}>
               Le créneau sera réservé chaque semaine, le même jour, jusqu'à la
@@ -344,7 +342,7 @@ export default function Calendrier() {
             <Ionicons
               name="information-circle-outline"
               size={16}
-              color={COLORS.red}
+              color={colors.red}
             />
             <Text style={calendrierStyles.mensuelText}>
               Touchez une date de début puis une date de fin pour réserver
@@ -394,7 +392,7 @@ export default function Calendrier() {
                 <Ionicons
                   name="alert-circle-outline"
                   size={16}
-                  color={COLORS.red}
+                  color={colors.red}
                 />
                 <Text style={componentStyles.errorText}>{erreurHoraire}</Text>
               </View>
@@ -420,7 +418,7 @@ export default function Calendrier() {
         <TextInput
           style={calendrierStyles.textarea}
           placeholder="Décrivez l'utilisation prévue de la salle… (obligatoire)"
-          placeholderTextColor={COLORS.grey}
+          placeholderTextColor={colors.grey}
           multiline
           numberOfLines={4}
           value={description}
@@ -437,7 +435,7 @@ export default function Calendrier() {
           activeOpacity={peutConfirmer ? 0.9 : 1}
         >
           <Text style={componentStyles.btnRowText}>Confirmer</Text>
-          <Ionicons name="chevron-forward" size={20} color={COLORS.white} />
+          <Ionicons name="chevron-forward" size={20} color={colors.white} />
         </TouchableOpacity>
       </ScrollView>
 

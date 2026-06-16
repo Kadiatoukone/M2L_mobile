@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { componentStyles, reservationStyles } from "../../../styles/styles";
-import { COLORS } from "../../../constants/theme";
+import { useTheme, useStyles } from "../../../context/ThemeContext";
 
 const STATUT_COLORS = {
   confirmé:     { bg: "#E8F5E9", text: "#2E7D32" },
@@ -17,6 +16,8 @@ const STATUT_COLORS = {
  *  - onAnnuler   {func}    Callback bouton annuler
  */
 export default function ReservationCard({ reservation, onAnnuler }) {
+  const { colors } = useTheme();
+  const { componentStyles, reservationStyles } = useStyles();
   const { salle, type, date, creneau, statut } = reservation;
   const sc = STATUT_COLORS[statut] ?? STATUT_COLORS["en attente"];
 
@@ -36,9 +37,9 @@ export default function ReservationCard({ reservation, onAnnuler }) {
 
         {/* Date + créneau */}
         <View style={reservationStyles.cardRow}>
-          <Ionicons name="calendar-outline" size={13} color={COLORS.textGrey} />
+          <Ionicons name="calendar-outline" size={13} color={colors.textGrey} />
           <Text style={reservationStyles.cardRowText}>{date}</Text>
-          <Ionicons name="time-outline" size={13} color={COLORS.textGrey} style={{ marginLeft: 8 }} />
+          <Ionicons name="time-outline" size={13} color={colors.textGrey} style={{ marginLeft: 8 }} />
           <Text style={reservationStyles.cardRowText}>{creneau}</Text>
         </View>
 

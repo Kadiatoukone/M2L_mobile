@@ -1,6 +1,6 @@
 import { Modal, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { componentStyles } from "../../../styles/styles";
+import { useStyles } from "../../../context/ThemeContext";
 
 /**
  * Modal de confirmation d'annulation.
@@ -11,6 +11,7 @@ import { componentStyles } from "../../../styles/styles";
  *  - onConfirm  {func}     Confirmer l'annulation
  */
 export default function CancelModal({ visible, onCancel, onConfirm }) {
+  const { componentStyles } = useStyles();
   return (
     <Modal
       visible={visible}

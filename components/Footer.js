@@ -2,25 +2,28 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Foundation from "@expo/vector-icons/Foundation";
-import { COLORS, SHADOW } from "../constants/theme";
+import { SHADOW } from "../constants/theme";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Footer() {
   const navigation = useNavigation();
   const route = useRoute();
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
 
   const tabs = [
     {
       name: "Accueil/index",
       label: "Accueil",
       icon: (active) => (
-        <Foundation name="home" size={22} color={active ? COLORS.red : COLORS.grey} />
+        <Foundation name="home" size={22} color={active ? colors.red : colors.grey} />
       ),
     },
     {
       name: "Recherche/index",
       label: "Recherche",
       icon: (active) => (
-        <Ionicons name="search" size={21} color={active ? COLORS.red : COLORS.grey} />
+        <Ionicons name="search" size={21} color={active ? colors.red : colors.grey} />
       ),
     },
     {
@@ -30,7 +33,7 @@ export default function Footer() {
         <Ionicons
           name="calendar-outline"
           size={21}
-          color={active ? COLORS.red : COLORS.grey}
+          color={active ? colors.red : colors.grey}
         />
       ),
     },
@@ -57,35 +60,37 @@ export default function Footer() {
   );
 }
 
-const styles = StyleSheet.create({
-  footer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 68,
-    backgroundColor: COLORS.white,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    borderTopWidth: 1,
-    borderTopColor: COLORS.border,
-    ...SHADOW.sm,
-  },
-  tab: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 8,
-  },
-  label: {
-    fontSize: 10,
-    marginTop: 3,
-    fontWeight: "500",
-    color: COLORS.grey,
-  },
-  labelActive: {
-    color: COLORS.red,
-    fontWeight: "700",
-  },
-});
+function getStyles(colors) {
+  return StyleSheet.create({
+    footer: {
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: 68,
+      backgroundColor: colors.surface,
+      flexDirection: "row",
+      justifyContent: "space-around",
+      alignItems: "center",
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+      ...SHADOW.sm,
+    },
+    tab: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 8,
+    },
+    label: {
+      fontSize: 10,
+      marginTop: 3,
+      fontWeight: "500",
+      color: colors.grey,
+    },
+    labelActive: {
+      color: colors.red,
+      fontWeight: "700",
+    },
+  });
+}

@@ -28,6 +28,21 @@ export function getMe() {
   return authFetch('/api/adherents/me');
 }
 
+// payload : { nom?, prenom?, ligue?, poste? }
+export function updateMe(payload) {
+  return authFetch('/api/adherents/me', {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  });
+}
+
+export function changerMotDePasse(currentPassword, newPassword) {
+  return authFetch('/api/adherents/me/password', {
+    method: 'PATCH',
+    body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+  });
+}
+
 // ── Salles ─────────────────────────────────────────────────────────────────────
 
 export function getSalles(categorie = null, libelle = null) {

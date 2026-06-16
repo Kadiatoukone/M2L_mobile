@@ -14,13 +14,14 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Logo from "../../assets/Logo_M2L.svg";
 import Vector from "../../assets/Vector.svg";
-import { authStyles, componentStyles } from "../../styles/styles";
-import { COLORS } from "../../constants/theme";
+import { useTheme, useStyles } from "../../context/ThemeContext";
 import SuccessModal from "./_components/SuccessModal";
 import { register } from "../../services/authService";
 
 export default function Register() {
   const navigation = useNavigation();
+  const { colors } = useTheme();
+  const { authStyles, componentStyles } = useStyles();
 
   const [nom, setNom]                       = useState("");
   const [prenom, setPrenom]                 = useState("");
@@ -76,7 +77,7 @@ export default function Register() {
       style={authStyles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <Vector width="65%" height="65%" style={authStyles.background} />
 
       <ScrollView
@@ -97,62 +98,62 @@ export default function Register() {
 
           {error ? (
             <View style={componentStyles.errorBox}>
-              <Ionicons name="alert-circle-outline" size={16} color={COLORS.red} />
+              <Ionicons name="alert-circle-outline" size={16} color={colors.red} />
               <Text style={componentStyles.errorText}>{error}</Text>
             </View>
           ) : null}
 
           {/* Nom */}
           <View style={componentStyles.inputWrapper}>
-            <Ionicons name="person-outline" size={18} color={COLORS.grey} style={componentStyles.inputIcon} />
-            <TextInput style={componentStyles.input} placeholder="Nom" placeholderTextColor={COLORS.grey} value={nom} onChangeText={setNom} />
+            <Ionicons name="person-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
+            <TextInput style={componentStyles.input} placeholder="Nom" placeholderTextColor={colors.grey} value={nom} onChangeText={setNom} />
           </View>
 
           {/* Prénom */}
           <View style={componentStyles.inputWrapper}>
-            <Ionicons name="person-outline" size={18} color={COLORS.grey} style={componentStyles.inputIcon} />
-            <TextInput style={componentStyles.input} placeholder="Prénom" placeholderTextColor={COLORS.grey} value={prenom} onChangeText={setPrenom} />
+            <Ionicons name="person-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
+            <TextInput style={componentStyles.input} placeholder="Prénom" placeholderTextColor={colors.grey} value={prenom} onChangeText={setPrenom} />
           </View>
 
           {/* Email */}
           <View style={componentStyles.inputWrapper}>
-            <Ionicons name="mail-outline" size={18} color={COLORS.grey} style={componentStyles.inputIcon} />
-            <TextInput style={componentStyles.input} placeholder="Adresse e-mail" placeholderTextColor={COLORS.grey} keyboardType="email-address" value={email} onChangeText={setEmail} autoCapitalize="none" />
+            <Ionicons name="mail-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
+            <TextInput style={componentStyles.input} placeholder="Adresse e-mail" placeholderTextColor={colors.grey} keyboardType="email-address" value={email} onChangeText={setEmail} autoCapitalize="none" />
           </View>
 
           {/* Numéro adhérent */}
           <View style={componentStyles.inputWrapper}>
-            <Ionicons name="card-outline" size={18} color={COLORS.grey} style={componentStyles.inputIcon} />
-            <TextInput style={componentStyles.input} placeholder="Numéro d'adhérent" placeholderTextColor={COLORS.grey} value={numeroAdherent} onChangeText={setNumeroAdherent} autoCapitalize="characters" />
+            <Ionicons name="card-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
+            <TextInput style={componentStyles.input} placeholder="Numéro d'adhérent" placeholderTextColor={colors.grey} value={numeroAdherent} onChangeText={setNumeroAdherent} autoCapitalize="characters" />
           </View>
 
           {/* Ligue */}
           <View style={componentStyles.inputWrapper}>
-            <Ionicons name="shield-outline" size={18} color={COLORS.grey} style={componentStyles.inputIcon} />
-            <TextInput style={componentStyles.input} placeholder="Ligue" placeholderTextColor={COLORS.grey} value={ligue} onChangeText={setLigue} />
+            <Ionicons name="shield-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
+            <TextInput style={componentStyles.input} placeholder="Ligue" placeholderTextColor={colors.grey} value={ligue} onChangeText={setLigue} />
           </View>
 
           {/* Poste */}
           <View style={componentStyles.inputWrapper}>
-            <Ionicons name="briefcase-outline" size={18} color={COLORS.grey} style={componentStyles.inputIcon} />
-            <TextInput style={componentStyles.input} placeholder="Poste dans la ligue" placeholderTextColor={COLORS.grey} value={poste} onChangeText={setPoste} />
+            <Ionicons name="briefcase-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
+            <TextInput style={componentStyles.input} placeholder="Poste dans la ligue" placeholderTextColor={colors.grey} value={poste} onChangeText={setPoste} />
           </View>
 
           {/* Mot de passe */}
           <View style={componentStyles.inputWrapper}>
-            <Ionicons name="lock-closed-outline" size={18} color={COLORS.grey} style={componentStyles.inputIcon} />
-            <TextInput style={componentStyles.input} placeholder="Mot de passe" placeholderTextColor={COLORS.grey} secureTextEntry={!showPassword} value={password} onChangeText={setPassword} />
+            <Ionicons name="lock-closed-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
+            <TextInput style={componentStyles.input} placeholder="Mot de passe" placeholderTextColor={colors.grey} secureTextEntry={!showPassword} value={password} onChangeText={setPassword} />
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={18} color={COLORS.grey} />
+              <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={18} color={colors.grey} />
             </TouchableOpacity>
           </View>
 
           {/* Confirmation */}
           <View style={componentStyles.inputWrapper}>
-            <Ionicons name="lock-closed-outline" size={18} color={COLORS.grey} style={componentStyles.inputIcon} />
-            <TextInput style={componentStyles.input} placeholder="Confirmer le mot de passe" placeholderTextColor={COLORS.grey} secureTextEntry={!showConfirm} value={confirmPassword} onChangeText={setConfirmPassword} />
+            <Ionicons name="lock-closed-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
+            <TextInput style={componentStyles.input} placeholder="Confirmer le mot de passe" placeholderTextColor={colors.grey} secureTextEntry={!showConfirm} value={confirmPassword} onChangeText={setConfirmPassword} />
             <TouchableOpacity onPress={() => setShowConfirm(!showConfirm)}>
-              <Ionicons name={showConfirm ? "eye-off-outline" : "eye-outline"} size={18} color={COLORS.grey} />
+              <Ionicons name={showConfirm ? "eye-off-outline" : "eye-outline"} size={18} color={colors.grey} />
             </TouchableOpacity>
           </View>
 
@@ -163,7 +164,7 @@ export default function Register() {
             disabled={loading}
           >
             {loading
-              ? <ActivityIndicator color={COLORS.white} />
+              ? <ActivityIndicator color={colors.white} />
               : <Text style={componentStyles.btnPrimaryText}>Créer mon compte</Text>
             }
           </TouchableOpacity>

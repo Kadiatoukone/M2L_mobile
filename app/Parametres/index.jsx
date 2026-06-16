@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   View,
   Text,
@@ -10,22 +9,25 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../components/Header";
 import SettingItem from "./_components/SettingItem";
-import { parametresStyles, commonStyles } from "../../styles/styles";
-import { COLORS } from "../../constants/theme";
+import { useTheme, useStyles } from "../../context/ThemeContext";
+import { useUser } from "../../context/UserContext";
 import { logout } from "../../services/authService";
 
 export default function Parametres() {
   const navigation = useNavigation();
-  const [darkMode, setDarkMode] = useState(false);
+  const { colors, isDark, toggleTheme } = useTheme();
+  const { parametresStyles, commonStyles } = useStyles();
+  const { refreshUser } = useUser();
 
   const handleLogout = async () => {
     await logout();
+    await refreshUser();
     navigation.reset({ index: 0, routes: [{ name: "LoginHome/index" }] });
   };
 
   return (
     <SafeAreaView style={commonStyles.safe}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} backgroundColor={colors.surface} />
 
       <Header title="Paramètres" showBack showSettings={false} />
 
@@ -41,10 +43,10 @@ export default function Parametres() {
             subtitle="Passer en thème sombre"
             right={
               <Switch
-                value={darkMode}
-                onValueChange={setDarkMode}
-                trackColor={{ false: COLORS.border, true: COLORS.red }}
-                thumbColor={COLORS.white}
+                value={isDark}
+                onValueChange={toggleTheme}
+                trackColor={{ false: colors.border, true: colors.red }}
+                thumbColor={colors.white}
               />
             }
           />
@@ -53,15 +55,6 @@ export default function Parametres() {
         {/* Compte */}
         <Text style={parametresStyles.sectionLabel}>Compte</Text>
         <View style={parametresStyles.card}>
-          <SettingItem
-            icon="shield-checkmark-outline"
-            iconBg="#FFF0F0"
-            iconColor={COLORS.red}
-            title="Confidentialité"
-            subtitle="Gérer vos données personnelles"
-            onPress={() => {}}
-            showSep
-          />
           <SettingItem
             icon="notifications-outline"
             iconBg="#FFF8E1"

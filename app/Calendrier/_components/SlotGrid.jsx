@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import { calendrierStyles } from "../../../styles/styles";
+import { useStyles } from "../../../context/ThemeContext";
 
 /**
  * Grille de créneaux d'1h. Permet de sélectionner une plage continue
@@ -22,6 +22,7 @@ export default function SlotGrid({
   onSelect,
   readOnly = false,
 }) {
+  const { calendrierStyles } = useStyles();
   if (creneaux.length === 0) {
     return <Text style={calendrierStyles.emptyHint}>Aucun créneau disponible pour cette sélection.</Text>;
   }

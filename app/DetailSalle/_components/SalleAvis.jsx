@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { detailSalleStyles } from "../../../styles/styles";
-import { COLORS } from "../../../constants/theme";
+import { useTheme, useStyles } from "../../../context/ThemeContext";
 
 // Mock temporaire — même état que sur l'appli web (SalleAvis.jsx) :
 // l'entité Commentaire existe en BDD mais n'est pas encore reliée aux salles
@@ -20,6 +19,7 @@ const MOCK_AVIS = [
 const PAR_PAGE = 6;
 
 function Stars({ note, size = 14 }) {
+  const { colors } = useTheme();
   return (
     <View style={{ flexDirection: "row" }}>
       {Array.from({ length: 5 }).map((_, i) => (
@@ -27,7 +27,7 @@ function Stars({ note, size = 14 }) {
           key={i}
           name={i < note ? "star" : "star-outline"}
           size={size}
-          color={i < note ? "#FFC107" : COLORS.border}
+          color={i < note ? "#FFC107" : colors.border}
         />
       ))}
     </View>
@@ -35,6 +35,8 @@ function Stars({ note, size = 14 }) {
 }
 
 export default function SalleAvis() {
+  const { colors } = useTheme();
+  const { detailSalleStyles } = useStyles();
   const [filter, setFilter] = useState("all");
   const [page, setPage] = useState(1);
 
@@ -77,7 +79,7 @@ export default function SalleAvis() {
             <Text style={[detailSalleStyles.filterChipText, filter === star && detailSalleStyles.filterChipTextActive]}>
               {star}
             </Text>
-            <Ionicons name="star" size={11} color={filter === star ? COLORS.white : COLORS.textGrey} />
+            <Ionicons name="star" size={11} color={filter === star ? colors.white : colors.textGrey} />
           </TouchableOpacity>
         ))}
       </View>
@@ -102,7 +104,7 @@ export default function SalleAvis() {
         ))
       ) : (
         <View style={detailSalleStyles.avisEmpty}>
-          <Ionicons name="chatbubble-outline" size={28} color={COLORS.border} />
+          <Ionicons name="chatbubble-outline" size={28} color={colors.border} />
           <Text style={detailSalleStyles.avisEmptyText}>Aucun avis trouvé.</Text>
         </View>
       )}
@@ -114,7 +116,7 @@ export default function SalleAvis() {
             disabled={page === 1}
             onPress={() => setPage((p) => p - 1)}
           >
-            <Ionicons name="chevron-back" size={14} color={COLORS.textGrey} />
+            <Ionicons name="chevron-back" size={14} color={colors.textGrey} />
           </TouchableOpacity>
           {Array.from({ length: totalPages }).map((_, i) => (
             <TouchableOpacity
@@ -132,7 +134,7 @@ export default function SalleAvis() {
             disabled={page === totalPages}
             onPress={() => setPage((p) => p + 1)}
           >
-            <Ionicons name="chevron-forward" size={14} color={COLORS.textGrey} />
+            <Ionicons name="chevron-forward" size={14} color={colors.textGrey} />
           </TouchableOpacity>
         </View>
       )}

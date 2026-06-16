@@ -11,8 +11,7 @@ import {
   jourFrancais,
 } from "../../Calendrier/_components/horairesUtils";
 import { getDisponibilite } from "../../../services/apiService";
-import { detailSalleStyles } from "../../../styles/styles";
-import { COLORS } from "../../../constants/theme";
+import { useTheme, useStyles } from "../../../context/ThemeContext";
 
 function formatDateFr(date) {
   return `${String(date.getDate()).padStart(2, "0")}/${String(date.getMonth() + 1).padStart(2, "0")}/${date.getFullYear()}`;
@@ -36,6 +35,8 @@ function premierJourReservable() {
  *  - horaires {Array}   Horaires d'ouverture de la salle
  */
 export default function DisponibilitesPreview({ salleId, horaires = [] }) {
+  const { colors } = useTheme();
+  const { detailSalleStyles } = useStyles();
   const [date, setDate] = useState(premierJourReservable);
   const [occupees, setOccupees] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -66,11 +67,11 @@ export default function DisponibilitesPreview({ salleId, horaires = [] }) {
     <View>
       <View style={detailSalleStyles.dispoNavRow}>
         <TouchableOpacity onPress={jourPrecedent} style={detailSalleStyles.dispoNavBtn}>
-          <Ionicons name="chevron-back" size={18} color={COLORS.text} />
+          <Ionicons name="chevron-back" size={18} color={colors.text} />
         </TouchableOpacity>
         <Text style={detailSalleStyles.dispoDate}>{jourFrancais(date)} {formatDateFr(date)}</Text>
         <TouchableOpacity onPress={jourSuivant} style={detailSalleStyles.dispoNavBtn}>
-          <Ionicons name="chevron-forward" size={18} color={COLORS.text} />
+          <Ionicons name="chevron-forward" size={18} color={colors.text} />
         </TouchableOpacity>
       </View>
 

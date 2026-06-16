@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { parametresStyles } from "../../../styles/styles";
-import { COLORS } from "../../../constants/theme";
+import { useTheme, useStyles } from "../../../context/ThemeContext";
 
 /**
  * Ligne de paramètre réutilisable.
@@ -17,6 +16,8 @@ import { COLORS } from "../../../constants/theme";
  *  - showSep     {boolean}  Afficher le séparateur en bas
  */
 export default function SettingItem({ icon, iconBg, iconColor, title, subtitle, onPress, right, showSep = false }) {
+  const { colors } = useTheme();
+  const { parametresStyles } = useStyles();
   const Wrapper = onPress ? TouchableOpacity : View;
 
   return (
@@ -31,7 +32,7 @@ export default function SettingItem({ icon, iconBg, iconColor, title, subtitle, 
             {subtitle && <Text style={parametresStyles.rowSub}>{subtitle}</Text>}
           </View>
         </View>
-        {right ?? (onPress ? <Ionicons name="chevron-forward" size={18} color={COLORS.grey} /> : null)}
+        {right ?? (onPress ? <Ionicons name="chevron-forward" size={18} color={colors.grey} /> : null)}
       </Wrapper>
       {showSep && <View style={parametresStyles.sep} />}
     </>

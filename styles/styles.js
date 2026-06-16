@@ -1,15 +1,21 @@
 import { StyleSheet } from "react-native";
-import { COLORS, RADIUS, SHADOW, SPACING } from "../constants/theme";
+import { RADIUS, SHADOW, SPACING } from "../constants/theme";
+
+// Toutes les feuilles de style dépendent de COLORS, qui change selon le
+// thème clair/sombre actif — on construit donc tout dans une fonction
+// plutôt que des objets statiques, recalculée par useStyles() à chaque
+// changement de thème (voir context/ThemeContext.js).
+export default function createStyles(COLORS) {
 
 // ============================================================
 // 1. COMMUN — Conteneurs, layout de base
 // ============================================================
 
-export const commonStyles = StyleSheet.create({
+const commonStyles = StyleSheet.create({
   // Écran principal avec SafeAreaView
   safe: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
   },
   safeGrey: {
     flex: 1,
@@ -55,13 +61,13 @@ export const commonStyles = StyleSheet.create({
 // 2. NAVIGATION — Header d'écran & Footer
 // ============================================================
 
-export const navigationStyles = StyleSheet.create({
+const navigationStyles = StyleSheet.create({
   // ── Header ──────────────────────────────────────────────
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.md,
     borderBottomWidth: 1,
@@ -99,6 +105,38 @@ export const navigationStyles = StyleSheet.create({
     width: 32,
     alignItems: "flex-end",
   },
+  // ── Menu déroulant engrenage (Mon profil / Paramètres) ──
+  settingsMenuOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.15)",
+  },
+  settingsMenu: {
+    position: "absolute",
+    top: 56,
+    right: SPACING.lg,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
+    paddingVertical: 4,
+    minWidth: 170,
+    ...SHADOW.md,
+  },
+  settingsMenuItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: SPACING.sm,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: 12,
+  },
+  settingsMenuText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: COLORS.text,
+  },
+  settingsMenuSep: {
+    height: 1,
+    backgroundColor: COLORS.border,
+    marginHorizontal: SPACING.sm,
+  },
   // ── Footer ──────────────────────────────────────────────
   footer: {
     position: "absolute",
@@ -106,7 +144,7 @@ export const navigationStyles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 68,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
@@ -136,7 +174,7 @@ export const navigationStyles = StyleSheet.create({
 // 3. AUTH — LoginHome, Login, Register
 // ============================================================
 
-export const authStyles = StyleSheet.create({
+const authStyles = StyleSheet.create({
   // Conteneur principal
   container: {
     flex: 1,
@@ -176,7 +214,7 @@ export const authStyles = StyleSheet.create({
   // Page d'accueil (LoginHome)
   homeContainer: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     paddingHorizontal: SPACING.lg,
     paddingBottom: SPACING.xxl,
   },
@@ -209,7 +247,7 @@ export const authStyles = StyleSheet.create({
   },
   // Carte formulaire
   formCard: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
     ...SHADOW.md,
@@ -246,7 +284,7 @@ export const authStyles = StyleSheet.create({
 // 4. COMPOSANTS COMMUNS — Inputs, boutons, badges, cartes
 // ============================================================
 
-export const componentStyles = StyleSheet.create({
+const componentStyles = StyleSheet.create({
   // ── Champ de saisie ──────────────────────────────────────
   inputWrapper: {
     flexDirection: "row",
@@ -299,7 +337,7 @@ export const componentStyles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   btnSecondary: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     paddingVertical: 15,
     borderRadius: RADIUS.md,
     alignItems: "center",
@@ -360,7 +398,7 @@ export const componentStyles = StyleSheet.create({
   cardBase: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     marginBottom: SPACING.md,
     overflow: "hidden",
@@ -467,7 +505,7 @@ export const componentStyles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   modalCard: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.xl,
     alignItems: "center",
@@ -475,7 +513,7 @@ export const componentStyles = StyleSheet.create({
     ...SHADOW.md,
   },
   modalCardBottom: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     borderTopLeftRadius: RADIUS.lg,
     borderTopRightRadius: RADIUS.lg,
     padding: SPACING.xl,
@@ -572,7 +610,7 @@ export const componentStyles = StyleSheet.create({
 // 5. ACCUEIL — Grille de catégories
 // ============================================================
 
-export const accueilStyles = StyleSheet.create({
+const accueilStyles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "900",
@@ -625,9 +663,9 @@ export const accueilStyles = StyleSheet.create({
 // 6. LISTE SALLES — Liste des salles par catégorie
 // ============================================================
 
-export const listeSallesStyles = StyleSheet.create({
+const listeSallesStyles = StyleSheet.create({
   searchContainer: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     paddingHorizontal: SPACING.lg,
     paddingTop: SPACING.md,
     paddingBottom: SPACING.sm,
@@ -659,7 +697,7 @@ export const listeSallesStyles = StyleSheet.create({
 // 7. DÉTAIL SALLE — Fiche descriptive
 // ============================================================
 
-export const detailSalleStyles = StyleSheet.create({
+const detailSalleStyles = StyleSheet.create({
   // Bandeau
   bannerBack: {
     padding: 4,
@@ -729,7 +767,7 @@ export const detailSalleStyles = StyleSheet.create({
   },
   // Carte info
   infoCard: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
     marginTop: SPACING.lg,
@@ -959,7 +997,7 @@ export const detailSalleStyles = StyleSheet.create({
 // 8. CALENDRIER — Réservation (calendrier + créneaux + modal)
 // ============================================================
 
-export const calendrierStyles = StyleSheet.create({
+const calendrierStyles = StyleSheet.create({
   // Bandeau
   bannerRow: {
     flexDirection: "row",
@@ -1025,7 +1063,7 @@ export const calendrierStyles = StyleSheet.create({
   },
   // Boîte calendrier
   calBox: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     padding: SPACING.md,
     marginBottom: SPACING.lg,
@@ -1154,7 +1192,7 @@ export const calendrierStyles = StyleSheet.create({
     borderRadius: RADIUS.sm,
     borderWidth: 1.5,
     borderColor: COLORS.border,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     alignItems: "center",
   },
   slotChipSelected: {
@@ -1184,7 +1222,7 @@ export const calendrierStyles = StyleSheet.create({
   },
   // Zone de texte description
   textarea: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.md,
     borderWidth: 1,
     borderColor: COLORS.border,
@@ -1236,19 +1274,19 @@ export const calendrierStyles = StyleSheet.create({
 // 9. RECHERCHE — Recherche par adresse + filtres
 // ============================================================
 
-export const rechercheStyles = StyleSheet.create({
+const rechercheStyles = StyleSheet.create({
   searchContainer: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.md,
   },
   tabsContainer: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     paddingHorizontal: SPACING.lg,
     paddingBottom: SPACING.md,
   },
   filtresWrapper: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
@@ -1263,7 +1301,7 @@ export const rechercheStyles = StyleSheet.create({
     borderRadius: RADIUS.full,
     borderWidth: 1.5,
     borderColor: COLORS.border,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
   },
   filtrePillActive: {
     backgroundColor: COLORS.darkRed,
@@ -1306,7 +1344,7 @@ export const rechercheStyles = StyleSheet.create({
 // 10. MES RÉSERVATIONS — Liste et cartes de réservation
 // ============================================================
 
-export const reservationStyles = StyleSheet.create({
+const reservationStyles = StyleSheet.create({
   // Header utilisateur
   userInfo: {
     flexDirection: "row",
@@ -1398,7 +1436,7 @@ export const reservationStyles = StyleSheet.create({
 // 11. PARAMÈTRES — Écran de configuration
 // ============================================================
 
-export const parametresStyles = StyleSheet.create({
+const parametresStyles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: SPACING.lg,
@@ -1415,7 +1453,7 @@ export const parametresStyles = StyleSheet.create({
   },
   // Carte de paramètre
   card: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.surface,
     borderRadius: RADIUS.lg,
     overflow: "hidden",
     ...SHADOW.sm,
@@ -1473,3 +1511,91 @@ export const parametresStyles = StyleSheet.create({
     fontSize: 15,
   },
 });
+
+// ============================================================
+// 12. PROFIL — Page "Mon profil"
+// ============================================================
+
+const profilStyles = StyleSheet.create({
+  header: {
+    alignItems: "center",
+    paddingVertical: SPACING.xl,
+  },
+  avatarLarge: {
+    width: 76,
+    height: 76,
+    borderRadius: 38,
+    backgroundColor: COLORS.darkRed,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: SPACING.sm,
+  },
+  avatarLargeText: {
+    color: COLORS.white,
+    fontSize: 28,
+    fontWeight: "800",
+  },
+  nom: {
+    fontSize: 18,
+    fontWeight: "800",
+    color: COLORS.text,
+  },
+  email: {
+    fontSize: 13,
+    color: COLORS.textGrey,
+    marginTop: 2,
+  },
+  readonlyField: {
+    backgroundColor: COLORS.lightGrey,
+    borderRadius: RADIUS.md,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: 13,
+    marginBottom: SPACING.md,
+  },
+  readonlyLabel: {
+    fontSize: 11,
+    color: COLORS.grey,
+    marginBottom: 2,
+  },
+  readonlyValue: {
+    fontSize: 14,
+    color: COLORS.textGrey,
+  },
+  fieldLabel: {
+    fontSize: 12,
+    color: COLORS.textGrey,
+    marginBottom: 6,
+    fontWeight: "600",
+  },
+  successBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    backgroundColor: "#E8F5E9",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: SPACING.md,
+  },
+  successText: {
+    flex: 1,
+    fontSize: 13,
+    color: "#2E7D32",
+  },
+});
+
+  return {
+    commonStyles,
+    navigationStyles,
+    authStyles,
+    componentStyles,
+    accueilStyles,
+    listeSallesStyles,
+    detailSalleStyles,
+    calendrierStyles,
+    rechercheStyles,
+    reservationStyles,
+    parametresStyles,
+    profilStyles,
+  };
+}

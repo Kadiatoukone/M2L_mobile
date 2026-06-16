@@ -1,5 +1,5 @@
 import { TouchableOpacity, Text, View } from "react-native";
-import { accueilStyles } from "../../../styles/styles";
+import { useStyles } from "../../../context/ThemeContext";
 
 /**
  * Carte d'une catégorie (sport ou événement).
@@ -10,6 +10,7 @@ import { accueilStyles } from "../../../styles/styles";
  *  - onPress {func}    Callback au clic
  */
 export default function CategoryCard({ name, color, onPress }) {
+  const { accueilStyles } = useStyles();
   return (
     <TouchableOpacity
       style={[accueilStyles.categoryCard, { backgroundColor: color }]}

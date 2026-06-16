@@ -1,6 +1,6 @@
 import { Modal, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { componentStyles } from "../../../styles/styles";
+import { useStyles } from "../../../context/ThemeContext";
 
 /**
  * Modal de succès affiché après une inscription réussie.
@@ -10,6 +10,7 @@ import { componentStyles } from "../../../styles/styles";
  *  - onClose  {func}     Fermeture → redirige vers Login
  */
 export default function SuccessModal({ visible, onClose }) {
+  const { componentStyles } = useStyles();
   return (
     <Modal
       visible={visible}

@@ -2,15 +2,17 @@ import { useNavigation } from "@react-navigation/native";
 import { StatusBar, Text, TouchableOpacity, View } from "react-native";
 import Logo from "../../assets/Logo_M2L.svg";
 import Vector from "../../assets/Vector.svg";
-import { COLORS, SPACING } from "../../constants/theme";
-import { authStyles, componentStyles } from "../../styles/styles";
+import { SPACING } from "../../constants/theme";
+import { useTheme, useStyles } from "../../context/ThemeContext";
 
 export default function LoginHome() {
   const navigation = useNavigation();
+  const { colors, isDark } = useTheme();
+  const { authStyles, componentStyles } = useStyles();
 
   return (
     <View style={authStyles.homeContainer}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} backgroundColor={colors.surface} />
       <Vector width="70%" height="70%" style={authStyles.background} />
 
       {/* Contenu Principal */}
@@ -24,7 +26,7 @@ export default function LoginHome() {
               componentStyles.redDivider ?? {
                 width: 48,
                 height: 3,
-                backgroundColor: COLORS.red,
+                backgroundColor: colors.red,
                 borderRadius: 2,
                 marginVertical: SPACING.lg,
               }

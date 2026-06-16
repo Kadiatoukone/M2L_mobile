@@ -14,8 +14,7 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import ReservationCard from "./_components/ReservationCard";
 import CancelModal from "./_components/CancelModal";
-import { reservationStyles, rechercheStyles, commonStyles } from "../../styles/styles";
-import { COLORS } from "../../constants/theme";
+import { useTheme, useStyles } from "../../context/ThemeContext";
 import { getMesReservations, supprimerReservation } from "../../services/apiService";
 
 const MAP_STATUT = {
@@ -33,6 +32,8 @@ const FILTRES = [
 
 export default function Reservation() {
   const navigation = useNavigation();
+  const { colors, isDark } = useTheme();
+  const { reservationStyles, rechercheStyles, commonStyles } = useStyles();
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading]           = useState(true);
   const [error, setError]               = useState("");
@@ -87,13 +88,13 @@ export default function Reservation() {
 
   return (
     <SafeAreaView style={commonStyles.safe}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} backgroundColor={colors.surface} />
 
       <Header
         left={
           <View style={reservationStyles.userInfo}>
             <View style={reservationStyles.avatar}>
-              <Ionicons name="person" size={20} color={COLORS.white} />
+              <Ionicons name="person" size={20} color={colors.white} />
             </View>
             <View>
               <Text style={reservationStyles.username}>Mon compte</Text>
@@ -131,11 +132,11 @@ export default function Reservation() {
 
       {loading ? (
         <View style={commonStyles.emptyState}>
-          <ActivityIndicator size="large" color={COLORS.red} />
+          <ActivityIndicator size="large" color={colors.red} />
         </View>
       ) : error ? (
         <View style={commonStyles.emptyState}>
-          <Ionicons name="wifi-outline" size={52} color={COLORS.border} />
+          <Ionicons name="wifi-outline" size={52} color={colors.border} />
           <Text style={commonStyles.emptyTitle}>Impossible de charger</Text>
           <Text style={commonStyles.emptySub}>{error}</Text>
         </View>
@@ -156,7 +157,7 @@ export default function Reservation() {
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View style={commonStyles.emptyState}>
-              <Ionicons name="calendar-outline" size={52} color={COLORS.border} />
+              <Ionicons name="calendar-outline" size={52} color={colors.border} />
               <Text style={commonStyles.emptyTitle}>Aucune réservation</Text>
               <Text style={commonStyles.emptySub}>Réservez une salle depuis l'accueil</Text>
               <TouchableOpacity

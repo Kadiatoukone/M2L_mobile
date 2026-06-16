@@ -1,7 +1,6 @@
 import { Modal, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { componentStyles, calendrierStyles } from "../../../styles/styles";
-import { COLORS } from "../../../constants/theme";
+import { useTheme, useStyles } from "../../../context/ThemeContext";
 
 /**
  * Modal de confirmation de réservation avec récapitulatif.
@@ -26,6 +25,8 @@ export default function ConfirmationModal({
   onCancel,
   onConfirm,
 }) {
+  const { colors } = useTheme();
+  const { componentStyles, calendrierStyles } = useStyles();
   return (
     <Modal
       visible={visible}
@@ -37,7 +38,7 @@ export default function ConfirmationModal({
         <View style={componentStyles.modalCardBottom}>
           {/* Titre */}
           <View style={componentStyles.modalHeader}>
-            <Ionicons name="calendar-check-outline" size={28} color={COLORS.red} />
+            <Ionicons name="calendar-check-outline" size={28} color={colors.red} />
             <Text style={componentStyles.modalTitle}>Confirmer la réservation</Text>
           </View>
 
