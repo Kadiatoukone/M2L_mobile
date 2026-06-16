@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { API_URL } from "../constants/api";
 
 const TOKEN_KEY = "jwt_token";
@@ -19,7 +19,7 @@ export async function login(email, password) {
     throw new Error(data.message ?? "Email ou mot de passe incorrect");
   }
 
-  await AsyncStorage.setItem(TOKEN_KEY, data.token);
+  await SecureStore.setItemAsync(TOKEN_KEY, data.token);
   return data.token;
 }
 
@@ -33,6 +33,8 @@ export async function register(payload) {
       email: payload.email,
       mot_de_passe: payload.password,   
       ligue: payload.ligue,
+      numero_adherent: payload.numero_adherent,
+      poste: payload.poste,
     }),
   });
 
@@ -46,9 +48,9 @@ export async function register(payload) {
 }
 
 export async function logout() {
-  await AsyncStorage.removeItem(TOKEN_KEY);
+  await SecureStore.deleteItemAsync(TOKEN_KEY);
 }
 
 export async function getToken() {
-  return AsyncStorage.getItem(TOKEN_KEY);
+  return SecureStore.getItemAsync(TOKEN_KEY);
 }

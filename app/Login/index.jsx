@@ -2,15 +2,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StatusBar,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StatusBar,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import Logo from "../../assets/Logo_M2L.svg";
 import Vector from "../../assets/Vector.svg";
@@ -35,9 +35,8 @@ export default function Login() {
 
     setLoading(true);
     try {
-      console.log(email, password);
       await login(email.trim(), password);
-      navigation.navigate("Accueil/index");
+      navigation.replace("Accueil/index");
     } catch (e) {
       setError(e.message);
       console.error(e);

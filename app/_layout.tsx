@@ -3,6 +3,9 @@ import { Stack } from "expo-router";
 export default function RootLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
+      {/* ── Page de vérification d'authentification ── */}
+      <Stack.Screen name="index" />
+
       {/* ── Authentification ── */}
       <Stack.Screen name="LoginHome/index" />
       <Stack.Screen name="Login/index" />
