@@ -1,3 +1,7 @@
+// Page d'inscription.
+// L'utilisateur remplit ses informations pour créer un compte adhérent.
+// Une fois le compte créé, une fenêtre de succès s'affiche et redirige vers la connexion.
+
 import { useState } from "react";
 import {
   View,
@@ -23,23 +27,27 @@ export default function Register() {
   const { colors } = useTheme();
   const { authStyles, componentStyles } = useStyles();
 
-  const [nom, setNom]                       = useState("");
-  const [prenom, setPrenom]                 = useState("");
-  const [email, setEmail]                   = useState("");
-  const [numeroAdherent, setNumeroAdherent] = useState("");
-  const [ligue, setLigue]                   = useState("");
-  const [poste, setPoste]                   = useState("");
-  const [password, setPassword]             = useState("");
+  // ─── Champs du formulaire ─────────────────────────────────────
+  const [nom, setNom]                         = useState("");
+  const [prenom, setPrenom]                   = useState("");
+  const [email, setEmail]                     = useState("");
+  const [numeroAdherent, setNumeroAdherent]   = useState("");
+  const [ligue, setLigue]                     = useState("");
+  const [poste, setPoste]                     = useState("");
+  const [password, setPassword]               = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword]     = useState(false);
-  const [showConfirm, setShowConfirm]       = useState(false);
-  const [loading, setLoading]               = useState(false);
-  const [error, setError]                   = useState("");
-  const [successModal, setSuccessModal]     = useState(false);
+  const [showPassword, setShowPassword]       = useState(false);
+  const [showConfirm, setShowConfirm]         = useState(false);
+
+  // ─── État de la page ──────────────────────────────────────────
+  const [loading, setLoading]           = useState(false);
+  const [error, setError]               = useState("");
+  const [successModal, setSuccessModal] = useState(false);
 
   const handleRegister = async () => {
     setError("");
 
+    // Vérification que tous les champs sont remplis
     if (!nom || !prenom || !email || !numeroAdherent || !ligue || !poste || !password || !confirmPassword) {
       setError("Tous les champs sont obligatoires.");
       return;
@@ -53,6 +61,7 @@ export default function Register() {
       return;
     }
 
+    // Envoi du formulaire au serveur
     setLoading(true);
     try {
       await register({
@@ -91,11 +100,12 @@ export default function Register() {
           <Text style={authStyles.appName}>M2L</Text>
         </View>
 
-        {/* Formulaire */}
+        {/* Formulaire d'inscription */}
         <View style={authStyles.formCard}>
           <Text style={authStyles.formTitle}>Inscription</Text>
           <Text style={authStyles.formSubtitle}>Créez votre compte adhérent</Text>
 
+          {/* Message d'erreur */}
           {error ? (
             <View style={componentStyles.errorBox}>
               <Ionicons name="alert-circle-outline" size={16} color={colors.red} />
@@ -148,7 +158,7 @@ export default function Register() {
             </TouchableOpacity>
           </View>
 
-          {/* Confirmation */}
+          {/* Confirmation mot de passe */}
           <View style={componentStyles.inputWrapper}>
             <Ionicons name="lock-closed-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
             <TextInput style={componentStyles.input} placeholder="Confirmer le mot de passe" placeholderTextColor={colors.grey} secureTextEntry={!showConfirm} value={confirmPassword} onChangeText={setConfirmPassword} />
@@ -157,7 +167,7 @@ export default function Register() {
             </TouchableOpacity>
           </View>
 
-          {/* Bouton */}
+          {/* Bouton créer le compte */}
           <TouchableOpacity
             style={[componentStyles.btnPrimary, loading && { opacity: 0.7 }]}
             onPress={handleRegister}
@@ -169,7 +179,7 @@ export default function Register() {
             }
           </TouchableOpacity>
 
-          {/* Lien connexion */}
+          {/* Lien vers la connexion */}
           <View style={authStyles.formFooter}>
             <Text style={authStyles.formFooterText}>Déjà un compte ? </Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login/index")}>
@@ -179,6 +189,7 @@ export default function Register() {
         </View>
       </ScrollView>
 
+      {/* Fenêtre de succès après inscription */}
       <SuccessModal
         visible={successModal}
         onClose={() => {

@@ -1,3 +1,6 @@
+// Page Paramètres — l'utilisateur peut activer le mode sombre
+// ou se déconnecter de l'application.
+
 import {
   View,
   Text,
@@ -19,6 +22,7 @@ export default function Parametres() {
   const { parametresStyles, commonStyles } = useStyles();
   const { refreshUser } = useUser();
 
+  // Déconnexion : je supprime le jeton et je reviens à l'écran de connexion
   const handleLogout = async () => {
     await logout();
     await refreshUser();
@@ -77,7 +81,7 @@ export default function Parametres() {
           />
         </View>
 
-        {/* Déconnexion */}
+        {/* Bouton de déconnexion */}
         <TouchableOpacity
           style={parametresStyles.logoutBtn}
           onPress={handleLogout}

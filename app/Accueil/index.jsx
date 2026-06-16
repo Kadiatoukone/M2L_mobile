@@ -1,8 +1,11 @@
+// Page d'accueil — première page après la connexion.
+// Elle affiche les types de salles disponibles (sports ou événements)
+// pour que l'utilisateur choisisse où commencer sa recherche.
+
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   ScrollView,
   StatusBar,
   Text,
@@ -10,6 +13,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import EtatChargement from "../../components/EtatChargement";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import { CATEGORY_COLORS, SPACING } from "../../constants/theme";
@@ -18,10 +22,9 @@ import { useUser } from "../../context/UserContext";
 import { getTypesSalles } from "../../services/apiService";
 import CategoryCard from "./_components/CategoryCard";
 
-// Attribue une couleur différente à chaque type, piochée aléatoirement
-// dans la palette — comme la palette contient plus de couleurs que de
-// types existants, deux cartes affichées en même temps n'ont jamais la
-// même couleur (et un nouveau type ajouté en BDD en récupère une autre couleur).
+// Je mélange les couleurs et j'en attribue une à chaque type de salle.
+// Il y a toujours plus de couleurs disponibles que de types,
+// donc deux cartes n'auront jamais la même couleur.
 function assignColors(items) {
   const palette = [...CATEGORY_COLORS];
   for (let i = palette.length - 1; i > 0; i--) {
@@ -39,13 +42,15 @@ export default function Accueil() {
   const { colors, isDark } = useTheme();
   const { accueilStyles, commonStyles, componentStyles, reservationStyles } = useStyles();
   const { user } = useUser();
-  const [tab, setTab] = useState("sports");
 
-  const [sports, setSports] = useState([]);
+  // ─── État ────────────────────────────────────────────────────
+  const [tab, setTab]               = useState("sports");
+  const [sports, setSports]         = useState([]);
   const [evenements, setEvenements] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [loading, setLoading]       = useState(true);
+  const [error, setError]           = useState("");
 
+  // ─── Chargement des types depuis le serveur ───────────────────
   const fetchTypes = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -67,10 +72,10 @@ export default function Accueil() {
   const categories = tab === "sports" ? sports : evenements;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.surface }}>
+    <SafeAreaView style={commonStyles.safe}>
       <StatusBar barStyle={isDark ? "light-content" : "dark-content"} backgroundColor={colors.surface} />
 
-      {/* Header avec l'identité de l'adhérent connecté */}
+      {/* En-tête avec les informations de l'adhérent connecté */}
       <Header
         showSettings
         left={
@@ -91,10 +96,7 @@ export default function Accueil() {
       />
 
       <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: SPACING.lg,
-          paddingBottom: 90,
-        }}
+        contentContainerStyle={{ paddingHorizontal: SPACING.lg, paddingBottom: 90 }}
         showsVerticalScrollIndicator={false}
       >
         {/* Titre */}
@@ -102,7 +104,7 @@ export default function Accueil() {
           Vous cherchez{"\n"}une salle pour ?
         </Text>
 
-        {/* Ligne décorative */}
+        {/* Barre décorative rouge */}
         <View
           style={{
             width: 40,
@@ -114,57 +116,35 @@ export default function Accueil() {
           }}
         />
 
-        {/* Onglets */}
-        <View
-          style={[
-            componentStyles.tabsContainer,
-            { alignSelf: "flex-start", marginBottom: SPACING.lg },
-          ]}
-        >
+        {/* Onglets Sports / Événements */}
+        <View style={[componentStyles.tabsContainer, { alignSelf: "flex-start", marginBottom: SPACING.lg }]}>
           {["sports", "events"].map((key) => (
             <TouchableOpacity
               key={key}
-              style={[
-                componentStyles.tabBtn,
-                tab === key && componentStyles.tabBtnActive,
-              ]}
+              style={[componentStyles.tabBtn, tab === key && componentStyles.tabBtnActive]}
               onPress={() => setTab(key)}
               activeOpacity={0.8}
             >
-              <Text
-                style={[
-                  componentStyles.tabText,
-                  tab === key && componentStyles.tabTextActive,
-                ]}
-              >
+              <Text style={[componentStyles.tabText, tab === key && componentStyles.tabTextActive]}>
                 {key === "sports" ? "Sports" : "Événements"}
               </Text>
             </TouchableOpacity>
           ))}
         </View>
 
-        {/* Sous-titre */}
         <Text style={accueilStyles.sectionLabel}>
           {tab === "sports" ? "Sports disponibles" : "Types d'événements"}
         </Text>
 
-        {/* Grille */}
-        {loading ? (
-          <View style={commonStyles.emptyState}>
-            <ActivityIndicator size="large" color={colors.red} />
-          </View>
-        ) : error ? (
-          <View style={commonStyles.emptyState}>
-            <Ionicons name="wifi-outline" size={48} color={colors.border} />
-            <Text style={commonStyles.emptyTitle}>Impossible de charger</Text>
-            <Text style={commonStyles.emptySub}>{error}</Text>
-          </View>
-        ) : categories.length === 0 ? (
-          <View style={commonStyles.emptyState}>
-            <Ionicons name="albums-outline" size={48} color={colors.border} />
-            <Text style={commonStyles.emptyTitle}>Aucun type disponible</Text>
-          </View>
-        ) : (
+        {/* Chargement / erreur / grille de catégories */}
+        <EtatChargement
+          chargement={loading}
+          erreur={error}
+          vide={!loading && !error && categories.length === 0}
+          iconeVide="albums-outline"
+          titreVide="Aucun type disponible"
+        />
+        {!loading && !error && categories.length > 0 && (
           <View style={accueilStyles.grid}>
             {categories.map((item) => (
               <CategoryCard

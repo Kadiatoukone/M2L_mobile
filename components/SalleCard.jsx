@@ -1,20 +1,19 @@
+// Carte affichée dans la liste des salles et dans la recherche.
+// Props :
+//  - salle    : les données de la salle (nom, adresse, note, capacité...)
+//  - category : le type/catégorie de la salle (affiché comme badge)
+//  - onPress  : action quand on appuie sur la carte
+
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme, useStyles } from "../context/ThemeContext";
 
-/**
- * Carte d'une salle — utilisée dans ListeSalles et Recherche.
- *
- * Props :
- *  - salle    {object}  { nom, adresse, note, capacite }
- *  - category {string}  Nom de la catégorie (badge)
- *  - onPress  {func}    Callback au clic
- *  - showDistance {boolean} Afficher le badge distance (Recherche uniquement)
- */
-export default function SalleCard({ salle, category, onPress, showDistance = false }) {
+export default function SalleCard({ salle, category, onPress }) {
   const { colors } = useTheme();
   const { componentStyles } = useStyles();
-  const { nom, adresse, note = 0, capacite, distance } = salle;
+  const { nom, adresse, note = 0, capacite } = salle;
+
+  // Je calcule le nombre d'étoiles à afficher (arrondi)
   const stars = Math.round(note);
 
   return (
@@ -23,11 +22,11 @@ export default function SalleCard({ salle, category, onPress, showDistance = fal
       onPress={onPress}
       activeOpacity={0.88}
     >
-      {/* Bandeau gauche rouge */}
+      {/* Bande rouge à gauche */}
       <View style={componentStyles.cardAccent} />
 
       <View style={componentStyles.cardBody}>
-        {/* Titre + badge catégorie */}
+        {/* Nom de la salle + badge catégorie */}
         <View style={componentStyles.cardTop}>
           <Text style={componentStyles.cardTitle} numberOfLines={1}>
             {nom}
@@ -37,7 +36,7 @@ export default function SalleCard({ salle, category, onPress, showDistance = fal
           </View>
         </View>
 
-        {/* Étoiles + note */}
+        {/* Note avec étoiles */}
         <View style={componentStyles.ratingRow}>
           {Array.from({ length: 5 }).map((_, i) => (
             <Ionicons
@@ -50,26 +49,19 @@ export default function SalleCard({ salle, category, onPress, showDistance = fal
           <Text style={componentStyles.ratingNote}>{note.toFixed(1)}</Text>
         </View>
 
-        {/* Adresse + distance optionnelle */}
+        {/* Adresse */}
         <View style={componentStyles.adresseRow}>
           <Ionicons name="location-outline" size={13} color={colors.red} />
           <Text style={componentStyles.adresseText} numberOfLines={1}>
             {adresse}
           </Text>
-          {showDistance && distance && (
-            <View style={{ backgroundColor: colors.lightGrey, paddingHorizontal: 7, paddingVertical: 2, borderRadius: 100 }}>
-              <Text style={{ fontSize: 11, color: colors.textGrey, fontWeight: "600" }}>
-                {distance}
-              </Text>
-            </View>
-          )}
         </View>
 
-        {/* Capacité (si dispo) */}
+        {/* Capacité (si renseignée) */}
         {capacite && (
-          <View style={{ flexDirection: "row", alignItems: "center", marginTop: 3 }}>
+          <View style={componentStyles.cardCapaciteRow}>
             <Ionicons name="people-outline" size={13} color={colors.textGrey} />
-            <Text style={{ fontSize: 12, color: colors.textGrey, marginLeft: 4 }}>
+            <Text style={componentStyles.cardCapaciteText}>
               Capacité : {capacite} pers.
             </Text>
           </View>

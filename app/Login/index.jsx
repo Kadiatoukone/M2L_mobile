@@ -1,16 +1,20 @@
+// Page de connexion.
+// L'utilisateur entre son email et son mot de passe.
+// Si la connexion réussit, il est redirigé vers l'accueil.
+
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import {
-    ActivityIndicator,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StatusBar,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StatusBar,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import Logo from "../../assets/Logo_M2L.svg";
 import Vector from "../../assets/Vector.svg";
@@ -23,14 +27,17 @@ export default function Login() {
   const { colors } = useTheme();
   const { authStyles, componentStyles } = useStyles();
   const { refreshUser } = useUser();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+  const [email, setEmail]           = useState("");
+  const [password, setPassword]     = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [loading, setLoading]       = useState(false);
+  const [error, setError]           = useState("");
 
   const handleLogin = async () => {
     setError("");
+
+    // Vérification que les champs sont remplis
     if (!email.trim() || !password) {
       setError("Veuillez renseigner votre email et mot de passe.");
       return;
@@ -39,6 +46,7 @@ export default function Login() {
     setLoading(true);
     try {
       await login(email.trim(), password);
+      // Je recharge le profil puis je redirige vers l'accueil
       await refreshUser();
       navigation.replace("Accueil/index");
     } catch (e) {
@@ -68,32 +76,24 @@ export default function Login() {
           <Text style={authStyles.appName}>M2L</Text>
         </View>
 
-        {/* Formulaire */}
+        {/* Formulaire de connexion */}
         <View style={authStyles.formCard}>
           <Text style={authStyles.formTitle}>Connexion</Text>
           <Text style={authStyles.formSubtitle}>
             Bienvenue à la Maison des Ligues !
           </Text>
 
+          {/* Message d'erreur */}
           {error ? (
             <View style={componentStyles.errorBox}>
-              <Ionicons
-                name="alert-circle-outline"
-                size={16}
-                color={colors.red}
-              />
+              <Ionicons name="alert-circle-outline" size={16} color={colors.red} />
               <Text style={componentStyles.errorText}>{error}</Text>
             </View>
           ) : null}
 
-          {/* Email */}
+          {/* Champ email */}
           <View style={componentStyles.inputWrapper}>
-            <Ionicons
-              name="mail-outline"
-              size={18}
-              color={colors.grey}
-              style={componentStyles.inputIcon}
-            />
+            <Ionicons name="mail-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
             <TextInput
               style={componentStyles.input}
               placeholder="Adresse e-mail"
@@ -105,14 +105,9 @@ export default function Login() {
             />
           </View>
 
-          {/* Mot de passe */}
+          {/* Champ mot de passe */}
           <View style={componentStyles.inputWrapper}>
-            <Ionicons
-              name="lock-closed-outline"
-              size={18}
-              color={colors.grey}
-              style={componentStyles.inputIcon}
-            />
+            <Ionicons name="lock-closed-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
             <TextInput
               style={componentStyles.input}
               placeholder="Mot de passe"
@@ -121,12 +116,9 @@ export default function Login() {
               value={password}
               onChangeText={setPassword}
             />
+            {/* Bouton pour afficher/cacher le mot de passe */}
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              <Ionicons
-                name={showPassword ? "eye-off-outline" : "eye-outline"}
-                size={18}
-                color={colors.grey}
-              />
+              <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={18} color={colors.grey} />
             </TouchableOpacity>
           </View>
 
@@ -143,14 +135,10 @@ export default function Login() {
             )}
           </TouchableOpacity>
 
-          {/* Lien inscription */}
+          {/* Lien vers l'inscription */}
           <View style={authStyles.formFooter}>
-            <Text style={authStyles.formFooterText}>
-              Pas encore de compte ?{" "}
-            </Text>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Register/index")}
-            >
+            <Text style={authStyles.formFooterText}>Pas encore de compte ? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Register/index")}>
               <Text style={authStyles.formFooterLink}>S'inscrire</Text>
             </TouchableOpacity>
           </View>

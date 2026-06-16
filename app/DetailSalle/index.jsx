@@ -1,3 +1,7 @@
+// Page de détail d'une salle.
+// Elle affiche la photo, les informations, les horaires, les disponibilités
+// et les avis. Un bouton permet de lancer la réservation.
+
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
@@ -25,6 +29,7 @@ export default function DetailSalle() {
   const route = useRoute();
   const { salle = {}, category = "Sport" } = route.params ?? {};
 
+  // Données de la salle reçues depuis la page précédente
   const {
     id = null,
     nom = "Salle",
@@ -37,10 +42,10 @@ export default function DetailSalle() {
     horaires = [],
   } = salle;
 
+  // Construction de l'URL complète de la photo
   const photoUrl = photo ? `${API_URL}${photo}` : null;
 
-  // Affichage personnalisé du type de salle (même principe que l'appli web) :
-  // une altère pour le sport, un bâtiment pour un événement.
+  // Icône et libellé selon le type de salle (sport ou événement)
   const isSport = typeSalle?.categorie === "sport";
   const typeIcon = isSport ? "barbell" : "business";
   const typeLabel = typeSalle?.libelle ?? category;
@@ -49,7 +54,7 @@ export default function DetailSalle() {
     <SafeAreaView style={commonStyles.safeGrey}>
       <StatusBar barStyle="light-content" backgroundColor={colors.darkRed} />
 
-      {/* Bandeau coloré */}
+      {/* Bandeau rouge en haut avec le nom de la salle */}
       <View style={componentStyles.banner}>
         <TouchableOpacity
           style={detailSalleStyles.bannerBack}
@@ -69,13 +74,10 @@ export default function DetailSalle() {
       </View>
 
       <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: SPACING.lg,
-          paddingBottom: 100,
-        }}
+        contentContainerStyle={{ paddingHorizontal: SPACING.lg, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Photo de la salle */}
+        {/* Photo de la salle (ou message si aucune photo) */}
         {photoUrl ? (
           <Image
             source={{ uri: photoUrl }}
@@ -91,13 +93,10 @@ export default function DetailSalle() {
           </View>
         )}
 
-        {/* Carte infos */}
+        {/* Informations principales */}
         <View style={detailSalleStyles.infoCard}>
           {adresse ? (
-            <InfoRow
-              icon="location"
-              text={[adresse, ville].filter(Boolean).join(", ")}
-            />
+            <InfoRow icon="location" text={[adresse, ville].filter(Boolean).join(", ")} />
           ) : null}
           {capacite ? (
             <InfoRow icon="people" text={`Capacité : ${capacite} personnes`} />
@@ -111,33 +110,29 @@ export default function DetailSalle() {
           {description ? (
             <Text style={detailSalleStyles.description}>{description}</Text>
           ) : (
-            <Text style={detailSalleStyles.emptyHint}>
-              Aucune description renseignée.
-            </Text>
+            <Text style={detailSalleStyles.emptyHint}>Aucune description renseignée.</Text>
           )}
         </View>
 
-        {/* Horaires d'ouverture (données réelles de la BDD) */}
+        {/* Horaires d'ouverture */}
         <View style={detailSalleStyles.section}>
-          <Text style={detailSalleStyles.sectionTitle}>
-            Horaires d'ouverture
-          </Text>
+          <Text style={detailSalleStyles.sectionTitle}>Horaires d'ouverture</Text>
           <HorairesList horaires={horaires} />
         </View>
 
-        {/* Disponibilités (créneaux déjà réservés, lecture seule) */}
+        {/* Aperçu des créneaux déjà réservés */}
         <View style={detailSalleStyles.section}>
           <Text style={detailSalleStyles.sectionTitle}>Disponibilités</Text>
           <DisponibilitesPreview salleId={id} horaires={horaires} />
         </View>
 
-        {/* Avis adhérents */}
+        {/* Avis des adhérents */}
         <View style={detailSalleStyles.section}>
           <Text style={detailSalleStyles.sectionTitle}>Avis adhérents</Text>
           <SalleAvis />
         </View>
 
-        {/* Bouton réserver */}
+        {/* Bouton pour lancer la réservation */}
         <TouchableOpacity
           style={[componentStyles.btnRow, { marginTop: SPACING.xl }]}
           onPress={() =>

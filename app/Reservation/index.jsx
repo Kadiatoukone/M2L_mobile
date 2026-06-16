@@ -1,3 +1,6 @@
+// Page "Mes réservations" — liste toutes les réservations de l'utilisateur
+// avec la possibilité de filtrer par statut et d'annuler une réservation.
+
 import { useState, useEffect, useCallback } from "react";
 import {
   View,
@@ -5,11 +8,11 @@ import {
   FlatList,
   TouchableOpacity,
   StatusBar,
-  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import EtatChargement from "../../components/EtatChargement";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import ReservationCard from "./_components/ReservationCard";
@@ -17,12 +20,14 @@ import CancelModal from "./_components/CancelModal";
 import { useTheme, useStyles } from "../../context/ThemeContext";
 import { getMesReservations, supprimerReservation } from "../../services/apiService";
 
+// Traduction des statuts reçus du serveur
 const MAP_STATUT = {
   EN_ATTENTE: "en attente",
   VALIDEE:    "confirmé",
   REFUSEE:    "refusé",
 };
 
+// Options de filtre disponibles
 const FILTRES = [
   { label: "Toutes",     statut: null },
   { label: "En attente", statut: "EN_ATTENTE" },
@@ -34,6 +39,8 @@ export default function Reservation() {
   const navigation = useNavigation();
   const { colors, isDark } = useTheme();
   const { reservationStyles, rechercheStyles, commonStyles } = useStyles();
+
+  // ─── État ────────────────────────────────────────────────────
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading]           = useState(true);
   const [error, setError]               = useState("");
@@ -41,6 +48,7 @@ export default function Reservation() {
   const [showCancel, setShowCancel]     = useState(false);
   const [filtre, setFiltre]             = useState(null);
 
+  // ─── Chargement des réservations ─────────────────────────────
   const fetchReservations = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -56,18 +64,21 @@ export default function Reservation() {
 
   useEffect(() => { fetchReservations(); }, [fetchReservations]);
 
+  // Annulation d'une réservation après confirmation
   const handleAnnuler = async () => {
     try {
       await supprimerReservation(selectedId);
+      // Je supprime la réservation de la liste sans recharger toute la page
       setReservations((prev) => prev.filter((r) => r.id !== selectedId));
     } catch (e) {
-      // silencieux
+      // Silencieux : la fenêtre se ferme même en cas d'erreur
     } finally {
       setShowCancel(false);
       setSelectedId(null);
     }
   };
 
+  // Mise en forme des données pour l'affichage dans la carte
   const toCardFormat = (r) => ({
     id:      r.id,
     salle:   r.salle?.nom?.trim() || "Salle",
@@ -78,6 +89,7 @@ export default function Reservation() {
     statut:  MAP_STATUT[r.statut] ?? "en attente",
   });
 
+  // Filtrage par statut et tri (les refusées en bas de liste)
   const filtered = filtre
     ? reservations.filter((r) => r.statut === filtre)
     : reservations;
@@ -90,6 +102,7 @@ export default function Reservation() {
     <SafeAreaView style={commonStyles.safe}>
       <StatusBar barStyle={isDark ? "light-content" : "dark-content"} backgroundColor={colors.surface} />
 
+      {/* En-tête */}
       <Header
         left={
           <View style={reservationStyles.userInfo}>
@@ -110,6 +123,7 @@ export default function Reservation() {
         <Text style={reservationStyles.sectionTitle}>Mes réservations</Text>
       </View>
 
+      {/* Filtres par statut */}
       <View style={rechercheStyles.filtresWrapper}>
         <FlatList
           data={FILTRES}
@@ -130,17 +144,9 @@ export default function Reservation() {
         />
       </View>
 
-      {loading ? (
-        <View style={commonStyles.emptyState}>
-          <ActivityIndicator size="large" color={colors.red} />
-        </View>
-      ) : error ? (
-        <View style={commonStyles.emptyState}>
-          <Ionicons name="wifi-outline" size={52} color={colors.border} />
-          <Text style={commonStyles.emptyTitle}>Impossible de charger</Text>
-          <Text style={commonStyles.emptySub}>{error}</Text>
-        </View>
-      ) : (
+      {/* Chargement / erreur / liste */}
+      <EtatChargement chargement={loading} erreur={error} />
+      {!loading && !error && (
         <FlatList
           data={sorted}
           keyExtractor={(item) => String(item.id)}
@@ -173,6 +179,7 @@ export default function Reservation() {
 
       <Footer />
 
+      {/* Fenêtre de confirmation d'annulation */}
       <CancelModal
         visible={showCancel}
         onCancel={() => setShowCancel(false)}

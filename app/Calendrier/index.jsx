@@ -25,7 +25,7 @@ import {
   jourFrancais,
   joursEntre,
   premierJourFerme,
-} from "./_components/horairesUtils";
+} from "../../utils/horairesUtils";
 import SlotGrid from "./_components/SlotGrid";
 
 function formatDateFr(date) {

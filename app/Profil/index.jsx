@@ -1,3 +1,6 @@
+// Page "Mon profil" — l'utilisateur peut voir et modifier ses informations
+// (nom, prénom, ligue, poste) et changer son mot de passe.
+
 import { useState, useEffect, useCallback } from "react";
 import {
   View,
@@ -10,6 +13,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import EtatChargement from "../../components/EtatChargement";
 import Header from "../../components/Header";
 import { useTheme, useStyles } from "../../context/ThemeContext";
 import { getMe, updateMe, changerMotDePasse } from "../../services/apiService";
@@ -17,25 +21,30 @@ import { getMe, updateMe, changerMotDePasse } from "../../services/apiService";
 export default function Profil() {
   const { colors, isDark } = useTheme();
   const { profilStyles, componentStyles, commonStyles } = useStyles();
+
+  // ─── Données du profil ────────────────────────────────────────
   const [adherent, setAdherent] = useState(null);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState("");
 
-  const [nom, setNom]       = useState("");
-  const [prenom, setPrenom] = useState("");
-  const [ligue, setLigue]   = useState("");
-  const [poste, setPoste]   = useState("");
-  const [saving, setSaving] = useState(false);
-  const [saveOk, setSaveOk] = useState(false);
+  // ─── Champs modifiables ───────────────────────────────────────
+  const [nom, setNom]           = useState("");
+  const [prenom, setPrenom]     = useState("");
+  const [ligue, setLigue]       = useState("");
+  const [poste, setPoste]       = useState("");
+  const [saving, setSaving]     = useState(false);
+  const [saveOk, setSaveOk]     = useState(false);
   const [saveError, setSaveError] = useState("");
 
-  const [ancien, setAncien]         = useState("");
-  const [nouveau, setNouveau]       = useState("");
+  // ─── Changement de mot de passe ───────────────────────────────
+  const [ancien, setAncien]             = useState("");
+  const [nouveau, setNouveau]           = useState("");
   const [confirmation, setConfirmation] = useState("");
-  const [savingPwd, setSavingPwd]   = useState(false);
-  const [pwdOk, setPwdOk]           = useState(false);
-  const [pwdError, setPwdError]     = useState("");
+  const [savingPwd, setSavingPwd]       = useState(false);
+  const [pwdOk, setPwdOk]               = useState(false);
+  const [pwdError, setPwdError]         = useState("");
 
+  // Je charge les données du profil depuis le serveur
   const fetchProfil = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -55,6 +64,7 @@ export default function Profil() {
 
   useEffect(() => { fetchProfil(); }, [fetchProfil]);
 
+  // Enregistrement des modifications du profil
   const handleSaveProfil = async () => {
     setSaveOk(false);
     setSaveError("");
@@ -70,6 +80,7 @@ export default function Profil() {
     }
   };
 
+  // Changement du mot de passe
   const handleSavePassword = async () => {
     setPwdOk(false);
     setPwdError("");
@@ -97,6 +108,7 @@ export default function Profil() {
     }
   };
 
+  // Initiales affichées dans l'avatar (ex : "CG" pour Camelia Ghezali)
   const initiales = `${(prenom || "?").charAt(0)}${(nom || "").charAt(0)}`.toUpperCase();
 
   return (
@@ -105,18 +117,12 @@ export default function Profil() {
 
       <Header title="Mon profil" showBack showSettings={false} />
 
-      {loading ? (
-        <View style={commonStyles.emptyState}>
-          <ActivityIndicator size="large" color={colors.red} />
-        </View>
-      ) : error ? (
-        <View style={commonStyles.emptyState}>
-          <Ionicons name="wifi-outline" size={48} color={colors.border} />
-          <Text style={commonStyles.emptyTitle}>Impossible de charger</Text>
-          <Text style={commonStyles.emptySub}>{error}</Text>
-        </View>
-      ) : (
+      {/* Chargement / erreur */}
+      <EtatChargement chargement={loading} erreur={error} />
+      {!loading && !error && (
         <ScrollView contentContainerStyle={commonStyles.scroll} showsVerticalScrollIndicator={false}>
+
+          {/* Avatar et identité */}
           <View style={profilStyles.header}>
             <View style={profilStyles.avatarLarge}>
               <Text style={profilStyles.avatarLargeText}>{initiales}</Text>
@@ -125,13 +131,13 @@ export default function Profil() {
             <Text style={profilStyles.email}>{adherent?.email}</Text>
           </View>
 
-          {/* Infos non modifiables */}
+          {/* Numéro d'adhérent (non modifiable) */}
           <View style={profilStyles.readonlyField}>
             <Text style={profilStyles.readonlyLabel}>Numéro d'adhérent</Text>
             <Text style={profilStyles.readonlyValue}>{adherent?.numero_adherent}</Text>
           </View>
 
-          {/* Informations modifiables */}
+          {/* Champs modifiables */}
           <Text style={profilStyles.fieldLabel}>Prénom</Text>
           <View style={componentStyles.inputWrapper}>
             <TextInput style={componentStyles.input} value={prenom} onChangeText={setPrenom} />
@@ -152,6 +158,7 @@ export default function Profil() {
             <TextInput style={componentStyles.input} value={poste} onChangeText={setPoste} />
           </View>
 
+          {/* Message de retour après enregistrement */}
           {saveOk ? (
             <View style={profilStyles.successBox}>
               <Ionicons name="checkmark-circle-outline" size={16} color="#2E7D32" />
@@ -172,7 +179,7 @@ export default function Profil() {
             {saving ? <ActivityIndicator color={colors.white} /> : <Text style={componentStyles.btnPrimaryText}>Enregistrer</Text>}
           </TouchableOpacity>
 
-          {/* Changement de mot de passe */}
+          {/* ─── Changement de mot de passe ──────────────────── */}
           <Text style={[profilStyles.fieldLabel, { marginTop: 28, fontSize: 15, fontWeight: "800", color: colors.text }]}>
             Changer le mot de passe
           </Text>
@@ -192,6 +199,7 @@ export default function Profil() {
             <TextInput style={componentStyles.input} value={confirmation} onChangeText={setConfirmation} secureTextEntry />
           </View>
 
+          {/* Message de retour après changement de mot de passe */}
           {pwdOk ? (
             <View style={profilStyles.successBox}>
               <Ionicons name="checkmark-circle-outline" size={16} color="#2E7D32" />

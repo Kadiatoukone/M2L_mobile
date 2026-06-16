@@ -1,3 +1,6 @@
+// Page de recherche — permet de trouver une salle par nom, adresse ou ville,
+// et de filtrer par type (sport ou événement).
+
 import { useState, useEffect, useCallback } from "react";
 import {
   View,
@@ -5,11 +8,10 @@ import {
   FlatList,
   StatusBar,
   TouchableOpacity,
-  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import EtatChargement from "../../components/EtatChargement";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import SearchBar from "../../components/SearchBar";
@@ -21,6 +23,8 @@ export default function Recherche() {
   const navigation = useNavigation();
   const { colors, isDark } = useTheme();
   const { rechercheStyles, componentStyles, commonStyles } = useStyles();
+
+  // ─── État ────────────────────────────────────────────────────
   const [adresse, setAdresse] = useState("");
   const [tab, setTab]         = useState("sports");
   const [filtre, setFiltre]   = useState("Tous");
@@ -30,11 +34,12 @@ export default function Recherche() {
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState("");
 
-  // Types disponibles (issus de la BDD) pour les filtres de l'onglet courant.
+  // Je charge les types de salles pour afficher les filtres
   useEffect(() => {
     getTypesSalles().then(setTypes).catch(() => {});
   }, []);
 
+  // Je recharge les salles quand l'onglet ou le filtre change
   const fetchSalles = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -52,11 +57,13 @@ export default function Recherche() {
 
   useEffect(() => { fetchSalles(); }, [fetchSalles]);
 
+  // Filtres disponibles selon l'onglet actif
   const filtresActifs = [
     "Tous",
     ...(tab === "sports" ? types.sport : types.evenement).map((t) => t.libelle),
   ];
 
+  // Filtrage local par le texte saisi dans la barre de recherche
   const results = salles.filter(
     (s) =>
       adresse.trim() === "" ||
@@ -69,10 +76,9 @@ export default function Recherche() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar barStyle={isDark ? "light-content" : "dark-content"} backgroundColor={colors.surface} />
 
-      {/* Header */}
       <Header titleLeft title="Recherche" showSettings showBack={false} />
 
-      {/* Barre adresse */}
+      {/* Barre de recherche par texte */}
       <View style={rechercheStyles.searchContainer}>
         <SearchBar
           value={adresse}
@@ -81,7 +87,7 @@ export default function Recherche() {
         />
       </View>
 
-      {/* Onglets Sport / Événements */}
+      {/* Onglets Sports / Événements */}
       <View style={rechercheStyles.tabsContainer}>
         <View style={componentStyles.tabsContainer}>
           {["sports", "events"].map((key) => (
@@ -98,7 +104,7 @@ export default function Recherche() {
         </View>
       </View>
 
-      {/* Filtres spécifiques */}
+      {/* Filtres par type de salle */}
       <View style={rechercheStyles.filtresWrapper}>
         <FlatList
           data={filtresActifs}
@@ -120,17 +126,8 @@ export default function Recherche() {
       </View>
 
       {/* Résultats */}
-      {loading ? (
-        <View style={commonStyles.emptyState}>
-          <ActivityIndicator size="large" color={colors.red} />
-        </View>
-      ) : error ? (
-        <View style={commonStyles.emptyState}>
-          <Ionicons name="wifi-outline" size={48} color={colors.border} />
-          <Text style={commonStyles.emptyTitle}>Impossible de charger</Text>
-          <Text style={commonStyles.emptySub}>{error}</Text>
-        </View>
-      ) : (
+      <EtatChargement chargement={loading} erreur={error} />
+      {!loading && !error && (
         <FlatList
           data={results}
           keyExtractor={(item) => String(item.id)}
@@ -154,11 +151,12 @@ export default function Recherche() {
             />
           )}
           ListEmptyComponent={
-            <View style={commonStyles.emptyState}>
-              <Ionicons name="search-outline" size={48} color={colors.border} />
-              <Text style={commonStyles.emptyTitle}>Aucun résultat</Text>
-              <Text style={commonStyles.emptySub}>Modifiez l'adresse ou le filtre</Text>
-            </View>
+            <EtatChargement
+              vide
+              iconeVide="search-outline"
+              titreVide="Aucun résultat"
+              sousTitreVide="Modifiez l'adresse ou le filtre"
+            />
           }
         />
       )}

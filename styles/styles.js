@@ -474,6 +474,16 @@ const componentStyles = StyleSheet.create({
     color: COLORS.textGrey,
     flex: 1,
   },
+  cardCapaciteRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 3,
+  },
+  cardCapaciteText: {
+    fontSize: 12,
+    color: COLORS.textGrey,
+    marginLeft: 4,
+  },
   // ── Bandeaux d'écran (header coloré) ─────────────────────
   banner: {
     backgroundColor: COLORS.darkRed,

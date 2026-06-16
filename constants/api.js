@@ -1,9 +1,8 @@
 import Constants from "expo-constants";
 
-// En dev, on récupère automatiquement l'IP LAN utilisée par Metro pour servir
-// le bundle (celle que tu vois dans "Waiting on http://<ip>:8081" / le QR code).
-// Comme c'est la même IP que ton téléphone utilise déjà pour parler à Metro,
-// ça fonctionne sur n'importe quel réseau sans rien changer à la main.
+// Je cherche automatiquement l'adresse IP de mon PC en regardant
+// l'adresse qu'utilise déjà Expo pour afficher l'app sur le téléphone.
+// Comme ça, pas besoin de changer l'IP à la main à chaque fois.
 function getApiUrl() {
   if (__DEV__) {
     const hostUri =
@@ -17,11 +16,11 @@ function getApiUrl() {
       return `http://${host}:8000`;
     }
 
-    // Fallback si jamais hostUri n'est pas dispo (web, build, etc.)
+    // Si l'IP n'est pas trouvée, on utilise localhost par défaut
     return "http://localhost:8000";
   }
 
-  // TODO: remplacer par l'URL de l'API en production
+  // En production, mettre ici l'adresse du vrai serveur
   return "https://api.exemple.com";
 }
 

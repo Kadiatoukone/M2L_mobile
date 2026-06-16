@@ -1,18 +1,20 @@
+// Page liste des salles — affiche toutes les salles d'une catégorie
+// avec une barre de recherche pour filtrer par nom ou adresse.
+
 import { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
   FlatList,
   StatusBar,
-  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import EtatChargement from "../../components/EtatChargement";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import SearchBar from "../../components/SearchBar";
 import SalleCard from "../../components/SalleCard";
-import { Ionicons } from "@expo/vector-icons";
 import { useTheme, useStyles } from "../../context/ThemeContext";
 import { getSalles } from "../../services/apiService";
 
@@ -23,28 +25,31 @@ export default function ListeSalles() {
   const route = useRoute();
   const { category = "Salle", tab = "sports" } = route.params ?? {};
 
+  // ─── État ────────────────────────────────────────────────────
   const [salles, setSalles]   = useState([]);
   const [search, setSearch]   = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState("");
 
-const fetchSalles = useCallback(async () => {
-  setLoading(true);
-  setError('');
-  try {
-    const categorie = tab === 'sports' ? 'sport' : 'evenement';
-    const libelle   = category !== 'Salle' ? category : null; // ← passer le sport/événement
-    const data = await getSalles(categorie, libelle);
-    setSalles(data);
-  } catch (e) {
-    setError(e.message);
-  } finally {
-    setLoading(false);
-  }
-}, [tab, category]);
+  // Je charge les salles correspondant à la catégorie demandée
+  const fetchSalles = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const categorie = tab === 'sports' ? 'sport' : 'evenement';
+      const libelle   = category !== 'Salle' ? category : null;
+      const data = await getSalles(categorie, libelle);
+      setSalles(data);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [tab, category]);
 
   useEffect(() => { fetchSalles(); }, [fetchSalles]);
 
+  // Filtrage local par le texte de la barre de recherche
   const filtered = salles.filter(
     (s) =>
       s.nom.toLowerCase().includes(search.toLowerCase()) ||
@@ -57,6 +62,7 @@ const fetchSalles = useCallback(async () => {
 
       <Header title={category} showBack showSettings />
 
+      {/* Barre de recherche */}
       <View style={listeSallesStyles.searchContainer}>
         <SearchBar
           value={search}
@@ -70,17 +76,9 @@ const fetchSalles = useCallback(async () => {
         )}
       </View>
 
-      {loading ? (
-        <View style={commonStyles.emptyState}>
-          <ActivityIndicator size="large" color={colors.red} />
-        </View>
-      ) : error ? (
-        <View style={commonStyles.emptyState}>
-          <Ionicons name="wifi-outline" size={48} color={colors.border} />
-          <Text style={commonStyles.emptyTitle}>Impossible de charger</Text>
-          <Text style={commonStyles.emptySub}>{error}</Text>
-        </View>
-      ) : (
+      {/* Chargement / erreur / liste */}
+      <EtatChargement chargement={loading} erreur={error} />
+      {!loading && !error && (
         <FlatList
           data={filtered}
           keyExtractor={(item) => String(item.id)}
@@ -96,11 +94,12 @@ const fetchSalles = useCallback(async () => {
           contentContainerStyle={listeSallesStyles.listContent}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
-            <View style={commonStyles.emptyState}>
-              <Ionicons name="search-outline" size={48} color={colors.border} />
-              <Text style={commonStyles.emptyTitle}>Aucune salle trouvée</Text>
-              <Text style={commonStyles.emptySub}>Essayez un autre mot-clé</Text>
-            </View>
+            <EtatChargement
+              vide
+              iconeVide="search-outline"
+              titreVide="Aucune salle trouvée"
+              sousTitreVide="Essayez un autre mot-clé"
+            />
           }
         />
       )}

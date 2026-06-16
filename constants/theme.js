@@ -1,33 +1,34 @@
-// Palette de couleurs M2L — cohérente avec l'application web.
-// Deux variantes (clair / sombre) partageant les mêmes clés : tous les
-// écrans/styles consomment ces clés via useTheme()/useStyles(), donc
-// switcher de palette suffit à changer l'app entière de thème.
+// Couleurs de l'application — deux versions : claire et sombre.
+// Toutes les pages utilisent ces couleurs, donc changer de thème
+// met à jour l'application entière automatiquement.
+
 export const LIGHT_COLORS = {
-  // Rouges principaux
+  // Rouge M2L (couleur principale)
   red:        '#CC4040',
   darkRed:    '#430000',
 
-  // Neutres
+  // Gris
   grey:       '#ADABAB',
   lightGrey:  '#F4F4F4',
   border:     '#E5E5E5',
 
-  // Surfaces (cartes, header, footer, modals...) vs fond de page
+  // Fond des cartes, headers, modales
   surface:    '#FFFFFF',
+  // Fond des pages
   background: '#FAFAFA',
-  // Conservé pour les usages "blanc pur" (texte blanc sur fond coloré,
-  // qui doit rester blanc quel que soit le thème).
+  // Blanc pur — utilisé pour les textes sur fond coloré (reste blanc dans les deux thèmes)
   white:      '#FFFFFF',
 
-  // Textes
+  // Couleurs des textes
   text:       '#1A1A1A',
   textGrey:   '#666666',
   textLight:  '#ADABAB',
 
-  // Overlay modal
+  // Fond des popups (transparence noire)
   overlay:    'rgba(0,0,0,0.50)',
 };
 
+// Même structure, mais avec des tons plus sombres
 export const DARK_COLORS = {
   red:        '#E05656',
   darkRed:    '#2A0000',
@@ -47,13 +48,10 @@ export const DARK_COLORS = {
   overlay:    'rgba(0,0,0,0.70)',
 };
 
-// Rétro-compatibilité : quelques fichiers importent encore COLORS de façon
-// statique (hors du contexte de thème). Pointe vers la palette claire par
-// défaut — préférez useTheme()/useStyles() pour un rendu qui réagit au
-// thème choisi par l'utilisateur.
+// Par défaut on utilise le thème clair
 export const COLORS = LIGHT_COLORS;
 
-// Espacements communs
+// Espacements utilisés partout dans le projet
 export const SPACING = {
   xs:   4,
   sm:   8,
@@ -63,7 +61,7 @@ export const SPACING = {
   xxl:  48,
 };
 
-// Rayons de bordure communs
+// Arrondis des coins
 export const RADIUS = {
   sm:   8,
   md:   12,
@@ -71,11 +69,9 @@ export const RADIUS = {
   full: 100,
 };
 
-// Palette de couleurs pour les cartes de catégorie (Accueil).
-// Une couleur est piochée par type de salle venant de la BDD ; en avoir
-// plus que de types possibles garantit qu'on peut toujours en attribuer
-// une différente quand un nouveau type est ajouté. Volontairement fixe
-// (mêmes couleurs vives dans les deux thèmes).
+// Couleurs pour les cartes de catégorie sur l'accueil.
+// Il y en a plus qu'il n'y a de types de salles dans la BDD,
+// pour s'assurer que chaque carte aura toujours une couleur différente.
 export const CATEGORY_COLORS = [
   '#1B5E20', '#B71C1C', '#E65100', '#F57F17', '#4A148C',
   '#01579B', '#33691E', '#880E4F', '#006064', '#3E2723',
@@ -83,7 +79,7 @@ export const CATEGORY_COLORS = [
   '#6A1B9A',
 ];
 
-// Élévations / ombres communes
+// Ombres pour donner de la profondeur aux cartes
 export const SHADOW = {
   sm: {
     shadowColor: '#000',

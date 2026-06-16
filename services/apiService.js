@@ -1,6 +1,11 @@
+// Toutes les requêtes vers le serveur.
+// Chaque fonction correspond à une action possible dans l'application.
+
 import { getToken } from './authService';
 import { API_URL } from '../constants/api';
 
+// Fonction interne : envoie une requête au serveur en ajoutant
+// automatiquement le jeton de connexion dans l'en-tête.
 async function authFetch(endpoint, options = {}) {
   const token = await getToken();
 
@@ -22,13 +27,14 @@ async function authFetch(endpoint, options = {}) {
   return data;
 }
 
-// ── Profil ─────────────────────────────────────────────────────────────────────
+// ─── Profil ───────────────────────────────────────────────────────
 
+// Je récupère les informations de l'utilisateur connecté
 export function getMe() {
   return authFetch('/api/adherents/me');
 }
 
-// payload : { nom?, prenom?, ligue?, poste? }
+// Je modifie le nom, prénom, ligue ou poste de l'utilisateur
 export function updateMe(payload) {
   return authFetch('/api/adherents/me', {
     method: 'PATCH',
@@ -36,6 +42,7 @@ export function updateMe(payload) {
   });
 }
 
+// Je change le mot de passe de l'utilisateur
 export function changerMotDePasse(currentPassword, newPassword) {
   return authFetch('/api/adherents/me/password', {
     method: 'PATCH',
@@ -43,8 +50,9 @@ export function changerMotDePasse(currentPassword, newPassword) {
   });
 }
 
-// ── Salles ─────────────────────────────────────────────────────────────────────
+// ─── Salles ───────────────────────────────────────────────────────
 
+// Je récupère la liste des salles (filtrable par catégorie ou type)
 export function getSalles(categorie = null, libelle = null) {
   const params = new URLSearchParams();
   if (categorie) params.append('categorie', categorie);
@@ -53,23 +61,27 @@ export function getSalles(categorie = null, libelle = null) {
   return authFetch(`/api/salles${query}`);
 }
 
+// Je récupère les détails d'une salle par son identifiant
 export function getSalle(id) {
   return authFetch(`/api/salles/${id}`);
 }
 
-// ── Types de salles ────────────────────────────────────────────────────────────
+// ─── Types de salles ──────────────────────────────────────────────
 
-// Renvoie { sport: [{id, libelle, categorie}], evenement: [...] }
+// Je récupère tous les types de salles groupés par catégorie :
+// { sport: [...], evenement: [...] }
 export function getTypesSalles() {
   return authFetch('/api/types-salles');
 }
 
-// ── Réservations ───────────────────────────────────────────────────────────────
+// ─── Réservations ─────────────────────────────────────────────────
 
+// Je récupère toutes mes réservations
 export function getMesReservations() {
   return authFetch('/api/reservations');
 }
 
+// J'envoie une nouvelle demande de réservation au serveur
 export function creerReservation(payload) {
   return authFetch('/api/reservations', {
     method: 'POST',
@@ -77,12 +89,12 @@ export function creerReservation(payload) {
   });
 }
 
+// J'annule une réservation
 export function supprimerReservation(id) {
   return authFetch(`/api/reservations/${id}`, { method: 'DELETE' });
 }
 
-// Renvoie les créneaux déjà occupés (EN_ATTENTE/VALIDEE) pour une salle
-// entre dateDebut et dateFin (incluses), au format AAAA-MM-JJ.
+// Je vérifie quels créneaux sont déjà pris pour une salle sur une période donnée
 export function getDisponibilite(salleId, dateDebut, dateFin = dateDebut) {
   const params = new URLSearchParams({ dateDebut, dateFin });
   return authFetch(`/api/reservations/disponibilite/${salleId}?${params.toString()}`);

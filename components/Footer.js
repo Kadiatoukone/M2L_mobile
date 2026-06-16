@@ -1,3 +1,6 @@
+// Barre de navigation en bas de l'application.
+// Les trois onglets : Accueil, Recherche et Réservations.
+
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -11,6 +14,7 @@ export default function Footer() {
   const { colors } = useTheme();
   const styles = getStyles(colors);
 
+  // Liste des onglets avec leur nom, icône et route associée
   const tabs = [
     {
       name: "Accueil/index",
@@ -30,11 +34,7 @@ export default function Footer() {
       name: "Reservation/index",
       label: "Réservations",
       icon: (active) => (
-        <Ionicons
-          name="calendar-outline"
-          size={21}
-          color={active ? colors.red : colors.grey}
-        />
+        <Ionicons name="calendar-outline" size={21} color={active ? colors.red : colors.grey} />
       ),
     },
   ];
@@ -42,6 +42,7 @@ export default function Footer() {
   return (
     <View style={styles.footer}>
       {tabs.map((tab) => {
+        // L'onglet est mis en rouge si on est sur cette page
         const active = route.name === tab.name;
         return (
           <TouchableOpacity
@@ -60,6 +61,7 @@ export default function Footer() {
   );
 }
 
+// Styles de la barre de navigation
 function getStyles(colors) {
   return StyleSheet.create({
     footer: {

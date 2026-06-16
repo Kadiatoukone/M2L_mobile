@@ -9,7 +9,7 @@ import {
   formatDateISO,
   estOuvert,
   jourFrancais,
-} from "../../Calendrier/_components/horairesUtils";
+} from "../../../utils/horairesUtils";
 import { getDisponibilite } from "../../../services/apiService";
 import { useTheme, useStyles } from "../../../context/ThemeContext";
 

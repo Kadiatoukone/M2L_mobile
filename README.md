@@ -16,7 +16,7 @@ La M2L a donc engagé sa transformation numérique pour moderniser son image et 
 
 ## 🏗 Stack technique
 
-- **Mobile** : React Native, Expo (SDK 54), Expo Router (navigation par fichiers)
+- **Mobile** : React Native, Expo, Expo Router (navigation par fichiers)
 - **Backend** : Symfony, API REST, Doctrine ORM, authentification JWT (LexikJWTAuthenticationBundle)
 - **Stockage local** : Expo SecureStore (token JWT), AsyncStorage (préférences, ex. thème)
 
@@ -26,8 +26,8 @@ La M2L a donc engagé sa transformation numérique pour moderniser son image et 
 
 ### Prérequis
 
-- [Node.js](https://nodejs.org/) (LTS recommandée) et npm
-- L'application **Expo Go** sur un téléphone (Android/iOS), ou un émulateur Android Studio / simulateur Xcode
+- [Node.js](https://nodejs.org/) et npm
+- L'application **Expo Go** sur un téléphone (Android/iOS), ou un émulateur Android Studio
 - L'API M2L (Symfony) lancée en local — voir le dépôt `M2L_API`
 
 ### Créer un nouveau projet Expo (référence)
@@ -51,13 +51,13 @@ npm install
 
 Les principales dépendances du projet :
 
-| Catégorie | Paquets |
-|---|---|
-| Navigation | `expo-router`, `@react-navigation/native`, `@react-navigation/native-stack`, `@react-navigation/bottom-tabs` |
-| UI / icônes | `@expo/vector-icons`, `react-native-svg` (+ `react-native-svg-transformer`), `expo-image` |
-| Stockage | `expo-secure-store`, `@react-native-async-storage/async-storage` |
-| Gestes / animations | `react-native-gesture-handler`, `react-native-reanimated`, `react-native-worklets` |
-| Système | `expo-constants`, `expo-system-ui`, `expo-status-bar`, `expo-splash-screen` |
+| Catégorie           | Paquets                                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Navigation          | `expo-router`, `@react-navigation/native`, `@react-navigation/native-stack`, `@react-navigation/bottom-tabs` |
+| UI / icônes         | `@expo/vector-icons`, `react-native-svg` (+ `react-native-svg-transformer`), `expo-image`                    |
+| Stockage            | `expo-secure-store`, `@react-native-async-storage/async-storage`                                             |
+| Gestes / animations | `react-native-gesture-handler`, `react-native-reanimated`, `react-native-worklets`                           |
+| Système             | `expo-constants`, `expo-system-ui`, `expo-status-bar`, `expo-splash-screen`                                  |
 
 Pour ajouter une nouvelle dépendance compatible avec la version d'Expo du projet, toujours préférer :
 
@@ -80,23 +80,26 @@ Puis scanner le QR code affiché avec l'app **Expo Go** (Android/iOS), ou appuye
 ## ✅ Fonctionnalités mises en place
 
 ### Authentification
+
 - Inscription et connexion des adhérents (JWT)
-- Persistance de la session (reconnexion automatique)
 - Déconnexion
 
 ### Accueil & recherche
+
 - Liste des sports et types d'événements proposés, alimentée dynamiquement depuis la base de données (aucune donnée codée en dur)
 - Attribution automatique d'une couleur distincte à chaque catégorie
 - Recherche de salles par nom, adresse ou ville, avec filtres par type
 - Affichage de l'identité de l'adhérent connecté (nom, ligue, poste) dans l'en-tête
 
 ### Détail d'une salle
+
 - Fiche complète : photo, adresse, capacité, description, type (icône dédiée sport/événement)
 - Horaires d'ouverture réels de la salle
 - Aperçu des disponibilités jour par jour (créneaux déjà réservés visibles avant même de réserver)
-- Avis des adhérents
+- Avis des adhérents (mockés pour le moment)
 
 ### Réservation
+
 - Sélection d'une date unique ou d'une plage de dates continue
 - Sélection de créneaux d'1h, multi-sélection pour réserver plusieurs heures d'affilée
 - Réservation ponctuelle ou mensuelle (récurrence hebdomadaire automatique)
@@ -105,18 +108,22 @@ Puis scanner le QR code affiché avec l'app **Expo Go** (Android/iOS), ou appuye
 - Description obligatoire de la demande
 
 ### Mes réservations
+
 - Liste des réservations avec filtres par statut (en attente / confirmée / refusée)
 - Annulation d'une réservation
 - Suppression automatique des réservations refusées après 2 jours
 
 ### Espace gestionnaire (côté API)
+
 - Visibilité des demandes de réservation limitée au gestionnaire de la salle concernée et à l'administrateur
 - Validation ou refus d'une demande
+  -> Voir `M2L_webapp`
 
 ### Profil & paramètres
+
 - Consultation et modification des informations personnelles (nom, prénom, ligue, poste)
 - Changement de mot de passe
-- Mode sombre, avec choix mémorisé sur l'appareil
+- Mode sombre
 
 ---
 
