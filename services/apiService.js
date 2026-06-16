@@ -42,6 +42,13 @@ export function getSalle(id) {
   return authFetch(`/api/salles/${id}`);
 }
 
+// ── Types de salles ────────────────────────────────────────────────────────────
+
+// Renvoie { sport: [{id, libelle, categorie}], evenement: [...] }
+export function getTypesSalles() {
+  return authFetch('/api/types-salles');
+}
+
 // ── Réservations ───────────────────────────────────────────────────────────────
 
 export function getMesReservations() {
@@ -57,4 +64,11 @@ export function creerReservation(payload) {
 
 export function supprimerReservation(id) {
   return authFetch(`/api/reservations/${id}`, { method: 'DELETE' });
+}
+
+// Renvoie les créneaux déjà occupés (EN_ATTENTE/VALIDEE) pour une salle
+// entre dateDebut et dateFin (incluses), au format AAAA-MM-JJ.
+export function getDisponibilite(salleId, dateDebut, dateFin = dateDebut) {
+  const params = new URLSearchParams({ dateDebut, dateFin });
+  return authFetch(`/api/reservations/disponibilite/${salleId}?${params.toString()}`);
 }

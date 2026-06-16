@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { COLORS, SPACING, RADIUS, SHADOW } from "../constants/theme";
+import { COLORS, RADIUS, SHADOW, SPACING } from "../constants/theme";
 
 // ============================================================
 // 1. COMMUN — Conteneurs, layout de base
@@ -193,13 +193,13 @@ export const authStyles = StyleSheet.create({
     marginTop: SPACING.md,
   },
   homeSubtitle: {
-    fontSize: 16,
+    fontSize: 17,
     color: COLORS.textGrey,
     letterSpacing: 1,
     marginTop: SPACING.xs,
   },
   homeTagline: {
-    fontSize: 15,
+    fontSize: 20,
     color: COLORS.textGrey,
     textAlign: "center",
     lineHeight: 22,
@@ -687,12 +687,52 @@ export const detailSalleStyles = StyleSheet.create({
     letterSpacing: 0.3,
     lineHeight: 30,
   },
-  // Carte info (overlap sur le bandeau)
+  // Photo de la salle
+  photo: {
+    width: "100%",
+    height: 190,
+    borderRadius: RADIUS.lg,
+    marginTop: SPACING.lg,
+    backgroundColor: COLORS.lightGrey,
+  },
+  photoPlaceholder: {
+    width: "100%",
+    height: 190,
+    borderRadius: RADIUS.lg,
+    marginTop: SPACING.lg,
+    backgroundColor: COLORS.lightGrey,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: SPACING.xs,
+  },
+  photoPlaceholderText: {
+    fontSize: 12,
+    color: COLORS.grey,
+  },
+  // Aperçu disponibilités (navigation jour par jour)
+  dispoNavRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: SPACING.sm,
+  },
+  dispoNavBtn: {
+    padding: 6,
+    backgroundColor: COLORS.lightGrey,
+    borderRadius: RADIUS.full,
+  },
+  dispoDate: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: COLORS.text,
+    textTransform: "capitalize",
+  },
+  // Carte info
   infoCard: {
     backgroundColor: COLORS.white,
     borderRadius: RADIUS.lg,
     padding: SPACING.lg,
-    marginTop: -SPACING.lg,
+    marginTop: SPACING.lg,
     ...SHADOW.md,
   },
   ratingRow: {
@@ -746,40 +786,172 @@ export const detailSalleStyles = StyleSheet.create({
     color: COLORS.textGrey,
     lineHeight: 21,
   },
-  // Grille créneaux
-  horairesGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: SPACING.sm,
-  },
-  horaireBadge: {
-    borderRadius: RADIUS.sm,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    borderWidth: 1,
-  },
-  horaireDispo: {
-    backgroundColor: "#F0FFF4",
-    borderColor: "#4CAF50",
-  },
-  horaireOccupe: {
-    backgroundColor: COLORS.lightGrey,
-    borderColor: COLORS.border,
-  },
-  horaireText: {
+  emptyHint: {
     fontSize: 13,
-    fontWeight: "600",
+    color: COLORS.grey,
+    fontStyle: "italic",
   },
-  horaireTextDispo: {
+  // Horaires d'ouverture
+  horaireRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: SPACING.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+  },
+  horaireJour: {
+    flex: 1,
+    fontSize: 14,
+    fontWeight: "700",
+    color: COLORS.text,
+    textTransform: "capitalize",
+  },
+  horaireHeures: {
+    fontSize: 13,
+    color: COLORS.textGrey,
+    marginRight: SPACING.sm,
+  },
+  horaireFerme: {
+    fontSize: 13,
+    color: COLORS.grey,
+    marginRight: SPACING.sm,
+  },
+  horaireStatutBadge: {
+    borderRadius: RADIUS.full,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  horaireStatutOuvert: {
+    backgroundColor: "#F0FFF4",
+  },
+  horaireStatutFerme: {
+    backgroundColor: COLORS.lightGrey,
+  },
+  horaireStatutText: {
+    fontSize: 10,
+    fontWeight: "700",
+  },
+  horaireStatutTextOuvert: {
     color: "#2E7D32",
   },
-  horaireTextOccupe: {
+  horaireStatutTextFerme: {
     color: COLORS.grey,
   },
-  horaireOccupeLabel: {
-    fontSize: 10,
+  // Avis adhérents
+  avisHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: SPACING.md,
+  },
+  avisAverage: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: COLORS.text,
+    marginRight: SPACING.sm,
+  },
+  avisFilterRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: SPACING.xs,
+    marginBottom: SPACING.md,
+  },
+  filterChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: COLORS.lightGrey,
+    borderRadius: RADIUS.full,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  filterChipActive: {
+    backgroundColor: COLORS.red,
+  },
+  filterChipText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: COLORS.textGrey,
+  },
+  filterChipTextActive: {
+    color: COLORS.white,
+  },
+  avisItem: {
+    paddingVertical: SPACING.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+  },
+  avisItemHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: SPACING.xs,
+  },
+  avisUserRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: SPACING.sm,
+  },
+  avisAvatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: COLORS.red,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  avisAvatarText: {
+    color: COLORS.white,
+    fontWeight: "800",
+    fontSize: 13,
+  },
+  avisUser: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: COLORS.text,
+  },
+  avisDate: {
+    fontSize: 11,
     color: COLORS.grey,
-    marginTop: 1,
+  },
+  avisContent: {
+    fontSize: 13,
+    color: COLORS.textGrey,
+    lineHeight: 19,
+  },
+  avisEmpty: {
+    alignItems: "center",
+    paddingVertical: SPACING.lg,
+    gap: SPACING.xs,
+  },
+  avisEmptyText: {
+    fontSize: 13,
+    color: COLORS.grey,
+  },
+  paginationRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: SPACING.xs,
+    marginTop: SPACING.md,
+  },
+  pageBtn: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: COLORS.lightGrey,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  pageBtnActive: {
+    backgroundColor: COLORS.red,
+  },
+  pageBtnText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: COLORS.textGrey,
+  },
+  pageBtnTextActive: {
+    color: COLORS.white,
   },
 });
 
@@ -914,6 +1086,26 @@ export const calendrierStyles = StyleSheet.create({
     color: COLORS.white,
     fontWeight: "700",
   },
+  cellInRange: {
+    backgroundColor: "#FFF0F0",
+  },
+  cellTextInRange: {
+    color: COLORS.red,
+    fontWeight: "700",
+  },
+  cellClosed: {
+    opacity: 0.35,
+  },
+  cellTextClosed: {
+    color: COLORS.grey,
+    textDecorationLine: "line-through",
+  },
+  rangeHint: {
+    fontSize: 12,
+    color: COLORS.textGrey,
+    textAlign: "center",
+    marginTop: SPACING.xs,
+  },
   // Créneaux horaires
   subTitle: {
     fontSize: 15,
@@ -921,32 +1113,74 @@ export const calendrierStyles = StyleSheet.create({
     color: COLORS.text,
     marginBottom: SPACING.sm,
   },
-  creneauxGrid: {
+  emptyHint: {
+    fontSize: 13,
+    color: COLORS.grey,
+    fontStyle: "italic",
+  },
+  // Grille de créneaux d'1h (sélection de plage)
+  slotsHeaderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: SPACING.sm,
+  },
+  selectAllBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: RADIUS.full,
+    backgroundColor: "#FFF0F0",
+  },
+  selectAllBtnDisabled: {
+    backgroundColor: COLORS.lightGrey,
+  },
+  selectAllText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: COLORS.red,
+  },
+  selectAllTextDisabled: {
+    color: COLORS.grey,
+  },
+  slotsGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: SPACING.sm,
-    marginBottom: SPACING.lg,
+    marginBottom: SPACING.md,
   },
-  creneau: {
+  slotChip: {
     paddingHorizontal: 14,
     paddingVertical: 9,
     borderRadius: RADIUS.sm,
     borderWidth: 1.5,
     borderColor: COLORS.border,
     backgroundColor: COLORS.white,
+    alignItems: "center",
   },
-  creneauSel: {
+  slotChipSelected: {
     backgroundColor: COLORS.red,
     borderColor: COLORS.red,
   },
-  creneauText: {
+  slotChipOccupied: {
+    backgroundColor: COLORS.lightGrey,
+    borderColor: COLORS.border,
+  },
+  slotText: {
     fontSize: 13,
     color: COLORS.textGrey,
     fontWeight: "500",
   },
-  creneauTextSel: {
+  slotTextSelected: {
     color: COLORS.white,
     fontWeight: "700",
+  },
+  slotTextOccupied: {
+    color: COLORS.grey,
+  },
+  slotOccupeLabel: {
+    fontSize: 10,
+    color: COLORS.grey,
+    marginTop: 1,
   },
   // Zone de texte description
   textarea: {

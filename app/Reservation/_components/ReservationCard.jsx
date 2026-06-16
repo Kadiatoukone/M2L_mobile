@@ -6,7 +6,7 @@ import { COLORS } from "../../../constants/theme";
 const STATUT_COLORS = {
   confirmé:     { bg: "#E8F5E9", text: "#2E7D32" },
   "en attente": { bg: "#FFF8E1", text: "#F57F17" },
-  annulé:       { bg: "#FFEBEE", text: "#C62828" },
+  refusé:       { bg: "#FFEBEE", text: "#C62828" },
 };
 
 /**
@@ -49,7 +49,7 @@ export default function ReservationCard({ reservation, onAnnuler }) {
               {statut.charAt(0).toUpperCase() + statut.slice(1)}
             </Text>
           </View>
-          {statut !== "annulé" && (
+          {statut !== "refusé" && (
             <TouchableOpacity style={componentStyles.btnOutline} onPress={onAnnuler}>
               <Text style={componentStyles.btnOutlineText}>Annuler</Text>
             </TouchableOpacity>

@@ -2,25 +2,29 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { calendrierStyles } from "../../../styles/styles";
 import { COLORS } from "../../../constants/theme";
+import { estOuvert } from "./horairesUtils";
 
 const JOURS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 const MOIS  = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 
 function nbJours(annee, mois) { return new Date(annee, mois + 1, 0).getDate(); }
 function premierJour(annee, mois) { return (new Date(annee, mois, 1).getDay() + 6) % 7; }
+function memeJour(a, b) { return !!a && !!b && a.toDateString() === b.toDateString(); }
 
 /**
- * Grille de calendrier mensuel interactive.
+ * Grille de calendrier mensuel interactive, avec sélection d'une date
+ * unique OU d'une plage continue (dateDebut → dateFin), et jours de
+ * fermeture de la salle grisés/non sélectionnables.
  *
  * Props :
- *  - annee     {number}  Année affichée
- *  - mois      {number}  Mois affiché (0-11)
- *  - jourSel   {number}  Jour sélectionné
- *  - onPrev    {func}    Mois précédent
- *  - onNext    {func}    Mois suivant
- *  - onSelect  {func}    Sélection d'un jour
+ *  - annee, mois        Mois affiché
+ *  - dateDebut, dateFin  {Date|null}  Plage actuellement sélectionnée
+ *  - horaires            {Array}      Horaires d'ouverture de la salle
+ *  - minDate              {Date}       Premier jour sélectionnable (jours avant = grisés)
+ *  - onPrev, onNext      {func}       Navigation mois précédent/suivant
+ *  - onSelect            {func}       Appelé avec la Date tapée (jours ouverts et >= minDate uniquement)
  */
-export default function CalendarGrid({ annee, mois, jourSel, onPrev, onNext, onSelect }) {
+export default function CalendarGrid({ annee, mois, dateDebut, dateFin, horaires = [], minDate = null, onPrev, onNext, onSelect }) {
   const today  = new Date();
   const total  = nbJours(annee, mois);
   const offset = premierJour(annee, mois);
@@ -51,26 +55,38 @@ export default function CalendarGrid({ annee, mois, jourSel, onPrev, onNext, onS
       <View style={calendrierStyles.gridCal}>
         {cells.map((day, idx) => {
           if (!day) return <View key={`e${idx}`} style={calendrierStyles.cell} />;
-          const isAujourdhui =
-            day === today.getDate() &&
-            mois === today.getMonth() &&
-            annee === today.getFullYear();
-          const isSel = day === jourSel;
+
+          const date = new Date(annee, mois, day);
+          const tropTot = minDate && date < minDate;
+          const ferme = horaires.length > 0 && !estOuvert(horaires, date);
+          const indisponible = tropTot || ferme;
+          const isAujourdhui = date.toDateString() === today.toDateString();
+          const isDebut = memeJour(date, dateDebut);
+          const isFin = memeJour(date, dateFin);
+          const isSel = isDebut || isFin;
+          const isDansPlage =
+            dateDebut && dateFin && date > dateDebut && date < dateFin;
+
           return (
             <TouchableOpacity
               key={`d${day}`}
+              disabled={indisponible}
               style={[
                 calendrierStyles.cell,
                 isAujourdhui && !isSel && calendrierStyles.cellToday,
+                isDansPlage && calendrierStyles.cellInRange,
                 isSel && calendrierStyles.cellSel,
+                indisponible && calendrierStyles.cellClosed,
               ]}
-              onPress={() => onSelect(day)}
+              onPress={() => onSelect(date)}
             >
               <Text
                 style={[
                   calendrierStyles.cellText,
                   isAujourdhui && !isSel && calendrierStyles.cellTextToday,
+                  isDansPlage && calendrierStyles.cellTextInRange,
                   isSel && calendrierStyles.cellTextSel,
+                  indisponible && calendrierStyles.cellTextClosed,
                 ]}
               >
                 {day}

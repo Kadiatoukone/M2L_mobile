@@ -3,9 +3,8 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
+import { API_URL } from "../constants/api";
 
-// URL de base de l'API — à adapter selon votre environnement
-const API_URL = "http://192.168.1.11:8000";
 const TOKEN_KEY = "jwt_token";
 
 const AuthContext = createContext(null);
@@ -43,12 +42,12 @@ export function AuthProvider({ children }) {
     return data;
   }
 
-  // Connexion : POST /api/login_check
-  async function login(email, password) { 
-    const res = await fetch(`${API_URL}/api/login_adherent_check`, {
+  // Connexion : POST /api/adherent/login_check
+  async function login(email, password) {
+    const res = await fetch(`${API_URL}/api/adherent/login_check`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, mot_de_passe: password }), 
+      body: JSON.stringify({ email, password }),
     });
 
     if (!res.ok) {

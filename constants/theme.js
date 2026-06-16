@@ -38,6 +38,17 @@ export const RADIUS = {
   full: 100,
 };
 
+// Palette de couleurs pour les cartes de catégorie (Accueil).
+// Une couleur est piochée par type de salle venant de la BDD ; en avoir
+// plus que de types possibles garantit qu'on peut toujours en attribuer
+// une différente quand un nouveau type est ajouté.
+export const CATEGORY_COLORS = [
+  '#1B5E20', '#B71C1C', '#E65100', '#F57F17', '#4A148C',
+  '#01579B', '#33691E', '#880E4F', '#006064', '#3E2723',
+  '#283593', '#AD1457', '#827717', '#4E342E', '#37474F',
+  '#6A1B9A',
+];
+
 // Élévations / ombres communes
 export const SHADOW = {
   sm: {

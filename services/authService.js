@@ -4,12 +4,12 @@ import { API_URL } from "../constants/api";
 const TOKEN_KEY = "jwt_token";
 
 export async function login(email, password) {
-  const res = await fetch(`${API_URL}/api/login_adherent_check`, { 
+  const res = await fetch(`${API_URL}/api/adherent/login_check`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ 
-      email,          
-      mot_de_passe: password  
+    body: JSON.stringify({
+      email,
+      password,
     }),
   });
 
@@ -24,15 +24,17 @@ export async function login(email, password) {
 }
 
 export async function register(payload) {
-  const res = await fetch(`${API_URL}/api/adherents`, {  
+  const res = await fetch(`${API_URL}/api/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       nom: payload.nom,
       prenom: payload.prenom,
       email: payload.email,
-      mot_de_passe: payload.password,   
+      password: payload.password,
       ligue: payload.ligue,
+      poste: payload.poste,
+      numero_adherent: payload.numero_adherent,
     }),
   });
 

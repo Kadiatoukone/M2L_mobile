@@ -9,8 +9,8 @@ import { COLORS } from "../../../constants/theme";
  * Props :
  *  - visible      {boolean}  Afficher/masquer
  *  - salleName    {string}   Nom de la salle
- *  - dateFormatee {string}   Date sélectionnée formatée
- *  - creneau      {string}   Créneau sélectionné
+ *  - periode      {string}   Date (ou plage de dates) formatée
+ *  - horaire      {string}   Créneau choisi, ou "Toute la journée"
  *  - typeResa     {string}   "unique" | "mensuel"
  *  - description  {string}   Note de la demande
  *  - onCancel     {func}     Fermer sans confirmer
@@ -19,8 +19,8 @@ import { COLORS } from "../../../constants/theme";
 export default function ConfirmationModal({
   visible,
   salleName,
-  dateFormatee,
-  creneau,
+  periode,
+  horaire,
   typeResa,
   description,
   onCancel,
@@ -63,12 +63,12 @@ export default function ConfirmationModal({
 
           <View style={calendrierStyles.recapRow}>
             <Text style={calendrierStyles.recapLabel}>Date</Text>
-            <Text style={calendrierStyles.recapValue}>{dateFormatee}</Text>
+            <Text style={calendrierStyles.recapValue}>{periode}</Text>
           </View>
 
           <View style={calendrierStyles.recapRow}>
-            <Text style={calendrierStyles.recapLabel}>Créneau</Text>
-            <Text style={calendrierStyles.recapValue}>{creneau}</Text>
+            <Text style={calendrierStyles.recapLabel}>Horaire</Text>
+            <Text style={calendrierStyles.recapValue}>{horaire}</Text>
           </View>
 
           {description?.trim().length > 0 && (

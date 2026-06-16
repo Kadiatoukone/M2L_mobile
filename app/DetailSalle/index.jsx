@@ -1,26 +1,51 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
-  View,
-  Text,
-  TouchableOpacity,
+  Image,
   ScrollView,
   StatusBar,
-  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Footer from "../../components/Footer";
-import InfoRow from "./_components/InfoRow";
-import CreneauxGrid from "./_components/CreneauxGrid";
-import { detailSalleStyles, componentStyles, commonStyles } from "../../styles/styles";
+import { API_URL } from "../../constants/api";
 import { COLORS, SPACING } from "../../constants/theme";
+import {
+  commonStyles,
+  componentStyles,
+  detailSalleStyles,
+} from "../../styles/styles";
+import DisponibilitesPreview from "./_components/DisponibilitesPreview";
+import HorairesList from "./_components/HorairesList";
+import InfoRow from "./_components/InfoRow";
+import SalleAvis from "./_components/SalleAvis";
 
 export default function DetailSalle() {
   const navigation = useNavigation();
   const route = useRoute();
   const { salle = {}, category = "Sport" } = route.params ?? {};
 
-  const { nom = "Salle Omnisports", adresse = "12 rue de la Liberté, Nancy", note = 4.8, capacite = 80 } = salle;
-  const stars = Math.round(note);
+  const {
+    id = null,
+    nom = "Salle",
+    adresse = "",
+    ville = "",
+    capacite = "",
+    description = "",
+    photo = null,
+    typeSalle = null,
+    horaires = [],
+  } = salle;
+
+  const photoUrl = photo ? `${API_URL}${photo}` : null;
+
+  // Affichage personnalisé du type de salle (même principe que l'appli web) :
+  // une altère pour le sport, un bâtiment pour un événement.
+  const isSport = typeSalle?.categorie === "sport";
+  const typeIcon = isSport ? "barbell" : "business";
+  const typeLabel = typeSalle?.libelle ?? category;
 
   return (
     <SafeAreaView style={commonStyles.safeGrey}>
@@ -28,56 +53,103 @@ export default function DetailSalle() {
 
       {/* Bandeau coloré */}
       <View style={componentStyles.banner}>
-        <TouchableOpacity style={detailSalleStyles.bannerBack} onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={detailSalleStyles.bannerBack}
+          onPress={() => navigation.goBack()}
+        >
           <Ionicons name="arrow-back" size={22} color={COLORS.white} />
         </TouchableOpacity>
         <View style={detailSalleStyles.categoryBadge}>
-          <Text style={detailSalleStyles.categoryBadgeText}>{category.toUpperCase()}</Text>
+          <Text style={detailSalleStyles.categoryBadgeText}>
+            {category.toUpperCase()}
+          </Text>
         </View>
-        <Text style={detailSalleStyles.bannerTitle} numberOfLines={2}>{nom}</Text>
+        <Text style={detailSalleStyles.bannerTitle} numberOfLines={2}>
+          {nom}
+        </Text>
         <View style={componentStyles.bannerCircle} />
       </View>
 
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: SPACING.lg, paddingBottom: 100 }}
+        contentContainerStyle={{
+          paddingHorizontal: SPACING.lg,
+          paddingBottom: 100,
+        }}
         showsVerticalScrollIndicator={false}
       >
-        {/* Carte infos (overlap sur le bandeau) */}
-        <View style={detailSalleStyles.infoCard}>
-          {/* Note */}
-          <View style={detailSalleStyles.ratingRow}>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Ionicons key={i} name={i < stars ? "star" : "star-outline"} size={16} color={i < stars ? "#FFC107" : COLORS.border} />
-            ))}
-            <Text style={detailSalleStyles.ratingValue}>{note.toFixed(1)}</Text>
-            <Text style={detailSalleStyles.ratingCount}>(avis adhérents)</Text>
+        {/* Photo de la salle */}
+        {photoUrl ? (
+          <Image
+            source={{ uri: photoUrl }}
+            style={detailSalleStyles.photo}
+            resizeMode="cover"
+          />
+        ) : (
+          <View style={detailSalleStyles.photoPlaceholder}>
+            <Ionicons name="image-outline" size={32} color={COLORS.grey} />
+            <Text style={detailSalleStyles.photoPlaceholderText}>
+              Aucune photo disponible
+            </Text>
           </View>
+        )}
 
-          <InfoRow icon="location"  text={adresse} />
-          <InfoRow icon="people"    text={`Capacité : ${capacite} personnes`} />
-          <InfoRow icon="pricetag"  text={`Catégorie : ${category}`} />
+        {/* Carte infos */}
+        <View style={detailSalleStyles.infoCard}>
+          {adresse ? (
+            <InfoRow
+              icon="location"
+              text={[adresse, ville].filter(Boolean).join(", ")}
+            />
+          ) : null}
+          {capacite ? (
+            <InfoRow icon="people" text={`Capacité : ${capacite} personnes`} />
+          ) : null}
+          <InfoRow icon={typeIcon} text={typeLabel} />
         </View>
 
         {/* Description */}
         <View style={detailSalleStyles.section}>
           <Text style={detailSalleStyles.sectionTitle}>Description</Text>
-          <Text style={detailSalleStyles.description}>
-            Salle polyvalente idéale pour la pratique sportive et les activités
-            associatives. Équipée de vestiaires, douches et d'un parquet de qualité.
-            La salle est accessible aux personnes à mobilité réduite.
-          </Text>
+          {description ? (
+            <Text style={detailSalleStyles.description}>{description}</Text>
+          ) : (
+            <Text style={detailSalleStyles.emptyHint}>
+              Aucune description renseignée.
+            </Text>
+          )}
         </View>
 
-        {/* Créneaux */}
+        {/* Horaires d'ouverture (données réelles de la BDD) */}
         <View style={detailSalleStyles.section}>
-          <Text style={detailSalleStyles.sectionTitle}>Créneaux disponibles</Text>
-          <CreneauxGrid />
+          <Text style={detailSalleStyles.sectionTitle}>
+            Horaires d'ouverture
+          </Text>
+          <HorairesList horaires={horaires} />
+        </View>
+
+        {/* Disponibilités (créneaux déjà réservés, lecture seule) */}
+        <View style={detailSalleStyles.section}>
+          <Text style={detailSalleStyles.sectionTitle}>Disponibilités</Text>
+          <DisponibilitesPreview salleId={id} horaires={horaires} />
+        </View>
+
+        {/* Avis adhérents */}
+        <View style={detailSalleStyles.section}>
+          <Text style={detailSalleStyles.sectionTitle}>Avis adhérents</Text>
+          <SalleAvis />
         </View>
 
         {/* Bouton réserver */}
         <TouchableOpacity
           style={[componentStyles.btnRow, { marginTop: SPACING.xl }]}
-          onPress={() => navigation.navigate("Calendrier/index", { salleName: nom, salleType: category })}
+          onPress={() =>
+            navigation.navigate("Calendrier/index", {
+              salleId: id,
+              salleName: nom,
+              salleType: category,
+              horaires,
+            })
+          }
           activeOpacity={0.9}
         >
           <Ionicons name="calendar-outline" size={20} color={COLORS.white} />

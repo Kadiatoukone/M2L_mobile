@@ -5,24 +5,31 @@ import {
   FlatList,
   TouchableOpacity,
   StatusBar,
-  SafeAreaView,
   ActivityIndicator,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import ReservationCard from "./_components/ReservationCard";
 import CancelModal from "./_components/CancelModal";
-import { reservationStyles, commonStyles } from "../../styles/styles";
+import { reservationStyles, rechercheStyles, commonStyles } from "../../styles/styles";
 import { COLORS } from "../../constants/theme";
 import { getMesReservations, supprimerReservation } from "../../services/apiService";
 
 const MAP_STATUT = {
   EN_ATTENTE: "en attente",
   VALIDEE:    "confirmé",
-  REFUSEE:    "annulé",
+  REFUSEE:    "refusé",
 };
+
+const FILTRES = [
+  { label: "Toutes",     statut: null },
+  { label: "En attente", statut: "EN_ATTENTE" },
+  { label: "Confirmée",  statut: "VALIDEE" },
+  { label: "Refusée",    statut: "REFUSEE" },
+];
 
 export default function Reservation() {
   const navigation = useNavigation();
@@ -31,6 +38,7 @@ export default function Reservation() {
   const [error, setError]               = useState("");
   const [selectedId, setSelectedId]     = useState(null);
   const [showCancel, setShowCancel]     = useState(false);
+  const [filtre, setFiltre]             = useState(null);
 
   const fetchReservations = useCallback(async () => {
     setLoading(true);
@@ -61,16 +69,21 @@ export default function Reservation() {
 
   const toCardFormat = (r) => ({
     id:      r.id,
-    salle:   r.motif || "Réservation",
-    type:    "",
-    date:    r.dateDebut,
-    creneau: `${r.heureDebut} \u2013 ${r.heureFin}`,
+    salle:   r.salle?.nom?.trim() || "Salle",
+    type:    r.typeResa === "mensuel" ? "Mensuel" : "Ponctuel",
+    motif:   r.motif,
+    date:    r.dateDebut === r.dateFin ? r.dateDebut : `${r.dateDebut} → ${r.dateFin}`,
+    creneau: `${r.heureDebut} – ${r.heureFin}`,
     statut:  MAP_STATUT[r.statut] ?? "en attente",
   });
 
-  const sorted = reservations
+  const filtered = filtre
+    ? reservations.filter((r) => r.statut === filtre)
+    : reservations;
+
+  const sorted = filtered
     .map(toCardFormat)
-    .sort((a, b) => (a.statut === "annulé" ? 1 : b.statut === "annulé" ? -1 : 0));
+    .sort((a, b) => (a.statut === "refusé" ? 1 : b.statut === "refusé" ? -1 : 0));
 
   return (
     <SafeAreaView style={commonStyles.safe}>
@@ -94,6 +107,26 @@ export default function Reservation() {
       <View style={reservationStyles.sectionHeader}>
         <View style={reservationStyles.sectionAccent} />
         <Text style={reservationStyles.sectionTitle}>Mes réservations</Text>
+      </View>
+
+      <View style={rechercheStyles.filtresWrapper}>
+        <FlatList
+          data={FILTRES}
+          horizontal
+          keyExtractor={(item) => item.label}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={rechercheStyles.filtresList}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={[rechercheStyles.filtrePill, filtre === item.statut && rechercheStyles.filtrePillActive]}
+              onPress={() => setFiltre(item.statut)}
+            >
+              <Text style={[rechercheStyles.filtreText, filtre === item.statut && rechercheStyles.filtreTextActive]}>
+                {item.label}
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
       </View>
 
       {loading ? (

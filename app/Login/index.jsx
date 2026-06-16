@@ -52,7 +52,7 @@ export default function Login() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
-      <Vector width="65%" height="65%" style={authStyles.background} />
+      <Vector width="70%" height="70%" style={authStyles.background} />
 
       <ScrollView
         contentContainerStyle={authStyles.scroll}
@@ -61,7 +61,7 @@ export default function Login() {
       >
         {/* Logo */}
         <View style={authStyles.header}>
-          <Logo width={56} height={56} />
+          <Logo width={100} height={100} />
           <Text style={authStyles.appName}>M2L</Text>
         </View>
 
@@ -145,7 +145,9 @@ export default function Login() {
             <Text style={authStyles.formFooterText}>
               Pas encore de compte ?{" "}
             </Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Register/index")}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Register/index")}
+            >
               <Text style={authStyles.formFooterLink}>S'inscrire</Text>
             </TouchableOpacity>
           </View>
