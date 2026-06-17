@@ -1,20 +1,11 @@
+// Fenêtre affichée avant l'envoi de la réservation.
+// Récapitule la salle, le type, la date, l'horaire et la note,
+// puis demande confirmation à l'utilisateur.
+
 import { Modal, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme, useStyles } from "../../../context/ThemeContext";
 
-/**
- * Modal de confirmation de réservation avec récapitulatif.
- *
- * Props :
- *  - visible      {boolean}  Afficher/masquer
- *  - salleName    {string}   Nom de la salle
- *  - periode      {string}   Date (ou plage de dates) formatée
- *  - horaire      {string}   Créneau choisi, ou "Toute la journée"
- *  - typeResa     {string}   "unique" | "mensuel"
- *  - description  {string}   Note de la demande
- *  - onCancel     {func}     Fermer sans confirmer
- *  - onConfirm    {func}     Confirmer la réservation
- */
 export default function ConfirmationModal({
   visible,
   salleName,
@@ -44,7 +35,7 @@ export default function ConfirmationModal({
 
           <View style={componentStyles.modalDivider} />
 
-          {/* Récap */}
+          {/* Récapitulatif de la demande */}
           <View style={calendrierStyles.recapRow}>
             <Text style={calendrierStyles.recapLabel}>Salle</Text>
             <Text style={calendrierStyles.recapValue} numberOfLines={1}>{salleName}</Text>

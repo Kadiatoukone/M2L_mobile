@@ -1,14 +1,10 @@
+// Une ligne d'information avec une icône colorée à gauche.
+// Props : icon (nom de l'icône), text (texte affiché)
+
 import { View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme, useStyles } from "../../../context/ThemeContext";
 
-/**
- * Ligne d'information avec icône colorée.
- *
- * Props :
- *  - icon  {string}  Nom d'icône Ionicons
- *  - text  {string}  Texte affiché
- */
 export default function InfoRow({ icon, text }) {
   const { colors } = useTheme();
   const { detailSalleStyles } = useStyles();

@@ -1,3 +1,6 @@
+// Aperçu en lecture seule des créneaux déjà réservés pour une salle, jour par jour.
+// Permet à l'adhérent de voir ce qui est disponible avant d'aller sur la page de réservation.
+
 import { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,7 +20,7 @@ function formatDateFr(date) {
   return `${String(date.getDate()).padStart(2, "0")}/${String(date.getMonth() + 1).padStart(2, "0")}/${date.getFullYear()}`;
 }
 
-// Premier jour réservable (cohérent avec l'écran Calendrier : pas aujourd'hui, pas demain).
+// Premier jour réservable, comme sur la page de réservation (pas aujourd'hui, pas demain)
 function premierJourReservable() {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
@@ -25,15 +28,6 @@ function premierJourReservable() {
   return d;
 }
 
-/**
- * Aperçu, en lecture seule, des créneaux déjà réservés pour une salle —
- * jour par jour, pour que les adhérents sachent à l'avance ce qui est
- * disponible avant même d'aller sur l'écran de réservation.
- *
- * Props :
- *  - salleId  {number}  Id de la salle
- *  - horaires {Array}   Horaires d'ouverture de la salle
- */
 export default function DisponibilitesPreview({ salleId, horaires = [] }) {
   const { colors } = useTheme();
   const { detailSalleStyles } = useStyles();
@@ -41,6 +35,7 @@ export default function DisponibilitesPreview({ salleId, horaires = [] }) {
   const [occupees, setOccupees] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Je recharge les créneaux occupés à chaque changement de jour
   useEffect(() => {
     if (!salleId) return;
     let annule = false;

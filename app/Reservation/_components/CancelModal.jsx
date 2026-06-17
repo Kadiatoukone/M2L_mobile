@@ -1,15 +1,9 @@
+// Fenêtre de confirmation avant d'annuler une réservation.
+
 import { Modal, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useStyles } from "../../../context/ThemeContext";
 
-/**
- * Modal de confirmation d'annulation.
- *
- * Props :
- *  - visible    {boolean}  Afficher/masquer
- *  - onCancel   {func}     Fermer sans annuler
- *  - onConfirm  {func}     Confirmer l'annulation
- */
 export default function CancelModal({ visible, onCancel, onConfirm }) {
   const { componentStyles } = useStyles();
   return (

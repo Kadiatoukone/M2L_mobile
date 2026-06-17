@@ -1,23 +1,16 @@
+// Une ligne de la page Paramètres (icône + titre + sous-titre).
+// Si onPress est fourni, la ligne devient cliquable avec une flèche à droite.
+// Le prop "right" permet d'afficher un composant personnalisé à droite (ex: un Switch).
+
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme, useStyles } from "../../../context/ThemeContext";
 
-/**
- * Ligne de paramètre réutilisable.
- *
- * Props :
- *  - icon        {string}   Nom icône Ionicons
- *  - iconBg      {string}   Couleur de fond de l'icône
- *  - iconColor   {string}   Couleur de l'icône
- *  - title       {string}   Titre de l'item
- *  - subtitle    {string}   Sous-texte
- *  - onPress     {func}     Si fourni, rend l'item cliquable avec flèche
- *  - right       {node}     Composant custom à droite (ex: Switch)
- *  - showSep     {boolean}  Afficher le séparateur en bas
- */
 export default function SettingItem({ icon, iconBg, iconColor, title, subtitle, onPress, right, showSep = false }) {
   const { colors } = useTheme();
   const { parametresStyles } = useStyles();
+
+  // Si la ligne est cliquable, on utilise un TouchableOpacity, sinon une simple View
   const Wrapper = onPress ? TouchableOpacity : View;
 
   return (

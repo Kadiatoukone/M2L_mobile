@@ -1,19 +1,14 @@
+// Grille de créneaux d'une heure.
+// On peut sélectionner une plage continue : on touche un créneau de début,
+// puis un créneau de fin, et tout ce qui est entre les deux est inclus
+// (même principe que la sélection de dates dans le calendrier).
+//
+// readOnly affiche juste les créneaux sans pouvoir les sélectionner
+// (utilisé dans l'aperçu des disponibilités sur la page détail salle).
+
 import { View, Text, TouchableOpacity } from "react-native";
 import { useStyles } from "../../../context/ThemeContext";
 
-/**
- * Grille de créneaux d'1h. Permet de sélectionner une plage continue
- * (comme le calendrier : on touche un créneau de début, puis un créneau
- * de fin, tout ce qui est entre les deux est inclus).
- *
- * Props :
- *  - creneaux        {Array<{debut,fin}>}  Créneaux disponibles dans la fenêtre d'ouverture
- *  - occupes          {Set<string>}         Heures de début déjà réservées (non sélectionnables)
- *  - selectionDebut   {string|null}         Heure de début sélectionnée ("09:00")
- *  - selectionFin      {string|null}         Heure de fin sélectionnée ("11:00")
- *  - onSelect          {func}                Appelé avec le créneau touché
- *  - readOnly          {boolean}             Affichage seul (page détail salle)
- */
 export default function SlotGrid({
   creneaux,
   occupes = new Set(),

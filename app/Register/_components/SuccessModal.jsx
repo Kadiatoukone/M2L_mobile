@@ -1,14 +1,10 @@
+// Fenêtre affichée juste après une inscription réussie.
+// La fermeture redirige l'utilisateur vers la page de connexion.
+
 import { Modal, View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useStyles } from "../../../context/ThemeContext";
 
-/**
- * Modal de succès affiché après une inscription réussie.
- *
- * Props :
- *  - visible  {boolean}  Afficher ou non la modal
- *  - onClose  {func}     Fermeture → redirige vers Login
- */
 export default function SuccessModal({ visible, onClose }) {
   const { componentStyles } = useStyles();
   return (
@@ -20,7 +16,7 @@ export default function SuccessModal({ visible, onClose }) {
     >
       <View style={componentStyles.overlay}>
         <View style={componentStyles.modalCard}>
-          {/* Icône succès */}
+          {/* Icône de succès */}
           <View style={componentStyles.iconCircle}>
             <Ionicons name="checkmark" size={36} color="white" />
           </View>

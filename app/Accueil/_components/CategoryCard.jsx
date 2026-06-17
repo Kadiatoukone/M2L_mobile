@@ -1,14 +1,9 @@
+// Carte d'une catégorie (sport ou événement) affichée sur l'accueil.
+// Props : name (nom de la catégorie), color (couleur de fond), onPress
+
 import { TouchableOpacity, Text, View } from "react-native";
 import { useStyles } from "../../../context/ThemeContext";
 
-/**
- * Carte d'une catégorie (sport ou événement).
- *
- * Props :
- *  - name    {string}  Nom de la catégorie
- *  - color   {string}  Couleur de fond
- *  - onPress {func}    Callback au clic
- */
 export default function CategoryCard({ name, color, onPress }) {
   const { accueilStyles } = useStyles();
   return (

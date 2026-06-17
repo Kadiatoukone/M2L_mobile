@@ -1,13 +1,9 @@
+// Liste des horaires d'ouverture de la salle, un jour par ligne
+// (données réelles venant de la base de données).
+
 import { View, Text } from "react-native";
 import { useStyles } from "../../../context/ThemeContext";
 
-/**
- * Liste des horaires d'ouverture réels de la salle (issus de la BDD,
- * entité Horaire), un jour par ligne — pas de notion de créneau réservable.
- *
- * Props :
- *  - horaires {Array<{ id, jour, heureOuverture, heureFermeture, statut }>}
- */
 export default function HorairesList({ horaires = [] }) {
   const { detailSalleStyles } = useStyles();
   if (horaires.length === 0) {

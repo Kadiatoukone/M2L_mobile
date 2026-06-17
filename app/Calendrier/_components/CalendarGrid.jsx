@@ -1,3 +1,7 @@
+// Grille de calendrier mensuel.
+// Permet de choisir une date unique ou une plage continue (dateDebut → dateFin).
+// Les jours avant minDate ou les jours où la salle est fermée sont grisés.
+
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme, useStyles } from "../../../context/ThemeContext";
@@ -6,35 +10,27 @@ import { estOuvert } from "../../../utils/horairesUtils";
 const JOURS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 const MOIS  = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 
+// Nombre de jours dans un mois
 function nbJours(annee, mois) { return new Date(annee, mois + 1, 0).getDate(); }
+// Position du 1er jour du mois dans la semaine (0 = lundi)
 function premierJour(annee, mois) { return (new Date(annee, mois, 1).getDay() + 6) % 7; }
+// Compare deux dates en ignorant l'heure
 function memeJour(a, b) { return !!a && !!b && a.toDateString() === b.toDateString(); }
 
-/**
- * Grille de calendrier mensuel interactive, avec sélection d'une date
- * unique OU d'une plage continue (dateDebut → dateFin), et jours de
- * fermeture de la salle grisés/non sélectionnables.
- *
- * Props :
- *  - annee, mois        Mois affiché
- *  - dateDebut, dateFin  {Date|null}  Plage actuellement sélectionnée
- *  - horaires            {Array}      Horaires d'ouverture de la salle
- *  - minDate              {Date}       Premier jour sélectionnable (jours avant = grisés)
- *  - onPrev, onNext      {func}       Navigation mois précédent/suivant
- *  - onSelect            {func}       Appelé avec la Date tapée (jours ouverts et >= minDate uniquement)
- */
 export default function CalendarGrid({ annee, mois, dateDebut, dateFin, horaires = [], minDate = null, onPrev, onNext, onSelect }) {
   const { colors } = useTheme();
   const { calendrierStyles } = useStyles();
   const today  = new Date();
   const total  = nbJours(annee, mois);
   const offset = premierJour(annee, mois);
+
+  // Cases vides avant le 1er du mois, puis un numéro par jour, puis complète la dernière semaine
   const cells  = [...Array(offset).fill(null), ...Array.from({ length: total }, (_, i) => i + 1)];
   while (cells.length % 7 !== 0) cells.push(null);
 
   return (
     <View style={calendrierStyles.calBox}>
-      {/* Navigation mois */}
+      {/* Navigation mois précédent / suivant */}
       <View style={calendrierStyles.monthNav}>
         <TouchableOpacity onPress={onPrev} style={calendrierStyles.navBtn}>
           <Ionicons name="chevron-back" size={20} color={colors.text} />
@@ -45,14 +41,14 @@ export default function CalendarGrid({ annee, mois, dateDebut, dateFin, horaires
         </TouchableOpacity>
       </View>
 
-      {/* En-têtes jours */}
+      {/* En-têtes des jours de la semaine */}
       <View style={calendrierStyles.daysRow}>
         {JOURS.map((j) => (
           <Text key={j} style={calendrierStyles.dayLabel}>{j}</Text>
         ))}
       </View>
 
-      {/* Grille jours */}
+      {/* Grille des jours du mois */}
       <View style={calendrierStyles.gridCal}>
         {cells.map((day, idx) => {
           if (!day) return <View key={`e${idx}`} style={calendrierStyles.cell} />;
