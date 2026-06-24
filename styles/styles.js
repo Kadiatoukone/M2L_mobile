@@ -596,6 +596,55 @@ const componentStyles = StyleSheet.create({
     marginBottom: SPACING.lg,
   },
 
+  // ── Sélecteur déroulant (ex : choix de la ligue) ─────────
+  selectBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: COLORS.lightGrey,
+    borderRadius: RADIUS.md,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: 13,
+    marginBottom: SPACING.md,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  selectBoxLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  selectBoxText: {
+    flex: 1,
+    fontSize: 14,
+    color: COLORS.text,
+  },
+  selectBoxPlaceholder: {
+    color: COLORS.grey,
+  },
+  selectModalCard: {
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.lg,
+    padding: SPACING.lg,
+    width: "100%",
+    maxHeight: "70%",
+    ...SHADOW.md,
+  },
+  selectOption: {
+    paddingVertical: 14,
+  },
+  selectOptionText: {
+    fontSize: 15,
+    color: COLORS.text,
+  },
+  selectOptionTextSelected: {
+    color: COLORS.red,
+    fontWeight: "700",
+  },
+  selectOptionSep: {
+    height: 1,
+    backgroundColor: COLORS.border,
+  },
   // Message d'erreur inline
   errorBox: {
     flexDirection: "row",

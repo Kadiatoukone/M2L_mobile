@@ -27,6 +27,19 @@ async function authFetch(endpoint, options = {}) {
   return data;
 }
 
+// ─── Ligues ───────────────────────────────────────────────────────
+
+// Liste des ligues, utilisée pour le formulaire d'inscription.
+// Accessible sans être connecté, donc pas besoin du jeton (authFetch).
+export async function getLigues() {
+  const res = await fetch(`${API_URL}/api/ligues`);
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.message ?? 'Erreur API');
+  }
+  return data;
+}
+
 // ─── Profil ───────────────────────────────────────────────────────
 
 // Je récupère les informations de l'utilisateur connecté

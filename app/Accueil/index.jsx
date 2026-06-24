@@ -17,7 +17,7 @@ import EtatChargement from "../../components/EtatChargement";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import { CATEGORY_COLORS, SPACING } from "../../constants/theme";
-import { useTheme, useStyles } from "../../context/ThemeContext";
+import { useStyles, useTheme } from "../../context/ThemeContext";
 import { useUser } from "../../context/UserContext";
 import { getTypesSalles } from "../../services/apiService";
 import CategoryCard from "./_components/CategoryCard";
@@ -40,15 +40,16 @@ function assignColors(items) {
 export default function Accueil() {
   const navigation = useNavigation();
   const { colors, isDark } = useTheme();
-  const { accueilStyles, commonStyles, componentStyles, reservationStyles } = useStyles();
+  const { accueilStyles, commonStyles, componentStyles, reservationStyles } =
+    useStyles();
   const { user } = useUser();
 
   // ─── État ────────────────────────────────────────────────────
-  const [tab, setTab]               = useState("sports");
-  const [sports, setSports]         = useState([]);
+  const [tab, setTab] = useState("sports");
+  const [sports, setSports] = useState([]);
   const [evenements, setEvenements] = useState([]);
-  const [loading, setLoading]       = useState(true);
-  const [error, setError]           = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   // ─── Chargement des types depuis le serveur ───────────────────
   const fetchTypes = useCallback(async () => {
@@ -73,7 +74,10 @@ export default function Accueil() {
 
   return (
     <SafeAreaView style={commonStyles.safe}>
-      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} backgroundColor={colors.surface} />
+      <StatusBar
+        barStyle={isDark ? "light-content" : "dark-content"}
+        backgroundColor={colors.surface}
+      />
 
       {/* En-tête avec les informations de l'adhérent connecté */}
       <Header
@@ -88,7 +92,7 @@ export default function Accueil() {
                 {user ? `${user.prenom} ${user.nom}` : "—"}
               </Text>
               <Text style={reservationStyles.ligue} numberOfLines={1}>
-                {[user?.ligue, user?.poste].filter(Boolean).join(" · ") || "Adhérent M2L"}
+                {[user?.poste].filter(Boolean).join(" · ") || "Adhérent M2L"}
               </Text>
             </View>
           </View>
@@ -96,7 +100,10 @@ export default function Accueil() {
       />
 
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: SPACING.lg, paddingBottom: 90 }}
+        contentContainerStyle={{
+          paddingHorizontal: SPACING.lg,
+          paddingBottom: 90,
+        }}
         showsVerticalScrollIndicator={false}
       >
         {/* Titre */}
@@ -117,15 +124,28 @@ export default function Accueil() {
         />
 
         {/* Onglets Sports / Événements */}
-        <View style={[componentStyles.tabsContainer, { alignSelf: "flex-start", marginBottom: SPACING.lg }]}>
+        <View
+          style={[
+            componentStyles.tabsContainer,
+            { alignSelf: "flex-start", marginBottom: SPACING.lg },
+          ]}
+        >
           {["sports", "events"].map((key) => (
             <TouchableOpacity
               key={key}
-              style={[componentStyles.tabBtn, tab === key && componentStyles.tabBtnActive]}
+              style={[
+                componentStyles.tabBtn,
+                tab === key && componentStyles.tabBtnActive,
+              ]}
               onPress={() => setTab(key)}
               activeOpacity={0.8}
             >
-              <Text style={[componentStyles.tabText, tab === key && componentStyles.tabTextActive]}>
+              <Text
+                style={[
+                  componentStyles.tabText,
+                  tab === key && componentStyles.tabTextActive,
+                ]}
+              >
                 {key === "sports" ? "Sports" : "Événements"}
               </Text>
             </TouchableOpacity>

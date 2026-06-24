@@ -1,8 +1,9 @@
 // Page d'inscription.
 // L'utilisateur remplit ses informations pour créer un compte adhérent.
+// La ligue est choisie dans une liste déroulante reliée à la base de données.
 // Une fois le compte créé, une fenêtre de succès s'affiche et redirige vers la connexion.
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,6 +14,8 @@ import {
   ScrollView,
   StatusBar,
   ActivityIndicator,
+  Modal,
+  Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -21,6 +24,7 @@ import Vector from "../../assets/Vector.svg";
 import { useTheme, useStyles } from "../../context/ThemeContext";
 import SuccessModal from "./_components/SuccessModal";
 import { register } from "../../services/authService";
+import { getLigues } from "../../services/apiService";
 
 export default function Register() {
   const navigation = useNavigation();
@@ -32,12 +36,22 @@ export default function Register() {
   const [prenom, setPrenom]                   = useState("");
   const [email, setEmail]                     = useState("");
   const [numeroAdherent, setNumeroAdherent]   = useState("");
-  const [ligue, setLigue]                     = useState("");
+  const [ligueId, setLigueId]                 = useState(null);
   const [poste, setPoste]                     = useState("");
   const [password, setPassword]               = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword]       = useState(false);
   const [showConfirm, setShowConfirm]         = useState(false);
+
+  // ─── Liste des ligues (chargée depuis la BDD) ─────────────────
+  const [ligues, setLigues]             = useState([]);
+  const [showLigueModal, setShowLigueModal] = useState(false);
+
+  useEffect(() => {
+    getLigues().then(setLigues).catch(() => {});
+  }, []);
+
+  const ligueSelectionnee = ligues.find((l) => l.id === ligueId);
 
   // ─── État de la page ──────────────────────────────────────────
   const [loading, setLoading]           = useState(false);
@@ -48,7 +62,7 @@ export default function Register() {
     setError("");
 
     // Vérification que tous les champs sont remplis
-    if (!nom || !prenom || !email || !numeroAdherent || !ligue || !poste || !password || !confirmPassword) {
+    if (!nom || !prenom || !email || !numeroAdherent || !ligueId || !poste || !password || !confirmPassword) {
       setError("Tous les champs sont obligatoires.");
       return;
     }
@@ -69,7 +83,7 @@ export default function Register() {
         prenom,
         email: email.trim(),
         numero_adherent: numeroAdherent.trim(),
-        ligue,
+        ligue: ligueId,
         poste,
         password,
       });
@@ -137,11 +151,19 @@ export default function Register() {
             <TextInput style={componentStyles.input} placeholder="Numéro d'adhérent" placeholderTextColor={colors.grey} value={numeroAdherent} onChangeText={setNumeroAdherent} autoCapitalize="characters" />
           </View>
 
-          {/* Ligue */}
-          <View style={componentStyles.inputWrapper}>
-            <Ionicons name="shield-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
-            <TextInput style={componentStyles.input} placeholder="Ligue" placeholderTextColor={colors.grey} value={ligue} onChangeText={setLigue} />
-          </View>
+          {/* Ligue — liste déroulante reliée à la base de données */}
+          <TouchableOpacity style={componentStyles.selectBox} onPress={() => setShowLigueModal(true)}>
+            <View style={componentStyles.selectBoxLeft}>
+              <Ionicons name="shield-outline" size={18} color={colors.grey} style={componentStyles.inputIcon} />
+              <Text
+                style={[componentStyles.selectBoxText, !ligueSelectionnee && componentStyles.selectBoxPlaceholder]}
+                numberOfLines={1}
+              >
+                {ligueSelectionnee ? ligueSelectionnee.nom : "Choisir une ligue"}
+              </Text>
+            </View>
+            <Ionicons name="chevron-down" size={18} color={colors.grey} />
+          </TouchableOpacity>
 
           {/* Poste */}
           <View style={componentStyles.inputWrapper}>
@@ -188,6 +210,38 @@ export default function Register() {
           </View>
         </View>
       </ScrollView>
+
+      {/* Liste déroulante des ligues */}
+      <Modal visible={showLigueModal} transparent animationType="fade" onRequestClose={() => setShowLigueModal(false)}>
+        <Pressable style={componentStyles.overlay} onPress={() => setShowLigueModal(false)}>
+          <View style={componentStyles.selectModalCard}>
+            <Text style={componentStyles.modalTitle}>Choisir une ligue</Text>
+            <ScrollView>
+              {ligues.map((l, i) => (
+                <View key={l.id}>
+                  <TouchableOpacity
+                    style={componentStyles.selectOption}
+                    onPress={() => {
+                      setLigueId(l.id);
+                      setShowLigueModal(false);
+                    }}
+                  >
+                    <Text
+                      style={[
+                        componentStyles.selectOptionText,
+                        l.id === ligueId && componentStyles.selectOptionTextSelected,
+                      ]}
+                    >
+                      {l.nom}
+                    </Text>
+                  </TouchableOpacity>
+                  {i < ligues.length - 1 && <View style={componentStyles.selectOptionSep} />}
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+        </Pressable>
+      </Modal>
 
       {/* Fenêtre de succès après inscription */}
       <SuccessModal
